@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+# -*- coding: utf8 -*-
+ 
+# This is from HA5FTL
+#  http://tlfabian.blogspot.com/2013/10/amateur-ham-radio-analyzing-historical.html
+# with a few comments from N7DR
+
+# This simply downloads the complete daily RBN database as-is, and puts the daily data,
+# unchanged, into files with friendly names
+ 
+import os
+import time
+import urllib2
+import datetime
+ 
+base_url = "http://www.reversebeacon.net/raw_data/dl.php?f=" # place at which the data files are stored
+ 
+today = datetime.date.today()
+delta = datetime.timedelta(1)
+ 
+i = datetime.date(2009, 2, 21)		# start of the RBN data
+ 
+while i <= today:
+    datestr = "%d%02d%02d" % (i.year, i.month, i.day)
+    fname = "RBNDATA/%s.zip" % datestr
+    url = base_url + datestr
+ 
+    if os.path.isfile(fname):					# don't download data if there's already a file for that day (note that he doesn't chack that the file is not empty)
+        print "%s exists." % fname
+        i += delta
+        continue
+ 
+    print "Downloading %s..." % url
+ 
+    try:
+        content = urllib2.urlopen(url)
+        f = open(fname, "w")
+        f.write(content.read())
+        f.close()
+    except urllib2.HTTPError:
+        print "Error downloading %s" % url
+ 
+    i += delta
+    time.sleep(5)					# I suspect that the wait is unnecessary, since the data are probably hosted on a cloud VM; but it does no harm
+    
