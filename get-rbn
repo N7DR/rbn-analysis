@@ -1,0 +1,14 @@
+#! /bin/sh
+
+cd /zfs1/data/rbn
+
+# download any new RBN zip files
+download-rbn
+
+# convert to one big file, rbndata.tmp, adding friendly date and epoch data to each line
+convert-rbn
+
+# RBN data are not always in chronological order; no need to perform a stable (i.e., -s) sort
+sort -t , --key=15 -n rbndata.tmp > rbndata.csv
+
+

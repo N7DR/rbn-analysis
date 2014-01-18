@@ -1,3 +1,7 @@
-This director contains various files and scripts associated with analysing 
+This directory contains various files and scripts associated with analysing 
 historical data from the Reverse Beacon Network ("RBN").
+
+download-rbn:
+  Download daily historical files from the RBN as-is, putting the data into 
+  files with friendly names.
 
