@@ -1,0 +1,74 @@
+#!/usr/bin/env python
+# -*- coding: utf8 -*-
+ 
+# This is based on a script from HA5FTL
+#  http://tlfabian.blogspot.com/2013/10/amateur-ham-radio-analyzing-historical.html
+# which has been heavily modified by N7DR
+
+# This script imports the daily data files as downloaded from the RBN, 
+# adds a couple of useful fields (date and UNIX epoch) that allow us to
+# process lines more easily in other scripts. The data are then output to a single file
+
+# Note that the RBN data are not reliably ordered chronologically; this
+# lack of reliability is carried over to the output file, which needs to be sorted before
+# use if chronological sorting is necessary to an application.
+ 
+import calendar
+import datetime
+import glob
+import os
+import time
+import zipfile
+ 
+basedir = "RBNDATA"
+outputfile = "rbndata.tmp"  # file that will be used for output
+ 
+zips = glob.glob(basedir + "/*.zip")
+zips.sort()
+ 
+impf = open(outputfile, "w")
+ 
+for z in zips:                        # read each zip file
+    f = zipfile.ZipFile(z, "r")
+    content = None
+    csvname = f.namelist()[0]
+    print csvname
+    csv = f.open(csvname, "r")
+
+    for line in csv:                  # allow for a couple of minor changes in the RBN files over time
+        if line[:8] == 'callsign':
+            print "(dropping header)"
+            continue
+        if line[:1] == '(':
+            print "(dropping last line)"
+            continue
+	  
+        extra = 12 - line.count(',')
+        base_line = line.rstrip() + (',')*extra
+        
+        fields = base_line.split(',')
+
+# add date and epoch information
+
+# raw format of date/time is: 2013-12-12 23:59:59[+stuff]
+ 
+	year_str = fields[10][:4]
+	month_str = fields[10][5:7]
+	day_str = fields[10][8:10]
+	hour_str = fields[10][11:13]
+	minute_str = fields[10][14:16]
+	second_str = fields[10][17:19]
+	
+	date_str = year_str + month_str + day_str
+
+# forcing python to ignore our local time is non-trivial	
+	d = datetime.datetime(int(year_str), int(month_str), int(day_str), int(hour_str), int(minute_str), int(second_str), 0, None)
+        seconds = calendar.timegm(d.utctimetuple())     # actual UTC epoch
+	
+	new_line = base_line + "," + date_str + "," + str(int(seconds + 0.1))
+        
+	impf.write(new_line + "\n")
+    csv.close()
+    f.close()
+ 
+impf.close()
