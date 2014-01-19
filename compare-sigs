@@ -1,0 +1,39 @@
+#! /bin/sh
+
+# set the value of a bunch of variables
+
+export call1=$1
+export call2=$2
+export band=$3
+export continent=$4
+export start_date=$5
+export end_date=$6
+
+if [ -z "$5" ]
+  then
+    export start_date=00000000
+fi
+
+if [ -z "$6" ]
+  then
+    export end_date=30000000
+fi
+
+# directory in which the RBN data are to be found
+export directory=/zfs1/data/rbn
+
+# name of file containing the RBN data
+export filename=rbndata.csv
+
+# extract the relevant data from the RBN database, and process it to produce intermediate data
+grep ",$call1,\|,$call2," $directory/$filename | compare.py $call1 $call2 $band $continent $start_date $end_date > $call1-$call2-$band-$continent-$start_date-$end_date.data
+
+# complete the processing and generate plot
+Rscript /home/n7dr/bin/compare.R $call1 $call2 $band $continent $start_date $end_date
+
+# if output was produced, then view it
+if [ -f "$call1-$call2-$band-$continent-$start_date-$end_date.png" ]
+  then
+    gwenview "$call1-$call2-$band-$continent-$start_date-$end_date.png"
+fi
+ 

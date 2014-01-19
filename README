@@ -1,6 +1,13 @@
 This directory contains various files and scripts associated with analysing 
 historical data from the Reverse Beacon Network ("RBN").
 
+compare-sigs:
+  Compare the signals between two stations over a given time period, on a 
+  particular band and to a particular continent. Provides an estimate 
+  of the difference between the means of the underlying signal 
+  distributions, the 95% confidence limits of that estimate, and
+  the probability that one signal really is stronger than the other. 
+
 convert-rbn:
   Convert RBN data from the as-is format in the RBN zip files to the 
   single-file CSV format used by these scripts.
