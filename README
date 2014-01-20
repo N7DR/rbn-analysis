@@ -7,6 +7,10 @@ compare-sigs:
   of the difference between the means of the underlying signal 
   distributions, the 95% confidence limits of that estimate, and
   the probability that one signal really is stronger than the other. 
+  
+compare-sigs.py: Used by compare-sigs. Scans the local RBN database and 
+  extracts the details of comparison reports, then outputs a list of the 
+  SNR differences for use by compare-sigs.R.
 
 convert-rbn:
   Convert RBN data from the as-is format in the RBN zip files to the 
