@@ -1,6 +1,12 @@
 #!/usr/bin/Rscript
 
-  MIN_CLT <- 30  # minimum number of data points before the central limit theorem is deemed effective
+# generate comparison plot of two stations' signals
+
+# compare-sigs.R call1 call2 band continent start-date end-date
+# e.g.,
+# compare-sigs[.R] N7DR K7KU 10m EU 20111126 20111126
+
+  MIN_DATA_POINTS <- 30  # minimum number of data points before we have enough data for an analysis of the mean
 
 # read arguments from command line
   args <- commandArgs(TRUE)
@@ -77,8 +83,8 @@
 # generate a string containing the statistical info, ready for printing
  legend95 <- paste(sep="", "95% confidence = ", lb_str, " to ", ub_str, " dB; µ = ", mu_str, " dB; probability ", call2, " is the stronger = ", pright_str)
   
-# print it if the CLT is reasonably in effect
-  if (length(dB) >= MIN_CLT) mtext(legend95, side = 1, line = 4, outer=TRUE, col = 'black')
+# print it if the Central Limit Theorm is reasonably in effect
+  if (length(dB) >= MIN_DATA_POINTS) mtext(legend95, side = 1, line = 4, outer=TRUE, col = 'black')
 
 # we're done; close the device and exit
   graphics.off()

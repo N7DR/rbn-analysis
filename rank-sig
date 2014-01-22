@@ -1,0 +1,42 @@
+#! /bin/sh
+
+# change the next three variables as necessary to match your environment
+
+# directory in which the RBN data are to be found
+export directory=/zfs1/data/rbn
+
+# name of file containing the RBN data
+export filename=rbndata.csv
+
+# program to be used to view the output file
+export VIEWER=gwenview
+
+export call=$1
+export band=$2
+export continent=$3
+export start_date=$4
+export end_date=$5
+
+if [ -z "$4" ]
+  then
+    export start_date=00000000
+fi
+
+if [ -z "$5" ]
+  then
+    export end_date=30000000
+fi
+
+# don't do the initial filtering if there's a non-zero file of the correct name; the sort isn't necessary, but it's helpful
+if [ ! -s $call-$band-$continent-$start_date-$end_date.rank_data ]
+  then
+    grep ",$call," $directory/$filename | rank-sig.py $call $band $continent $start_date $end_date | sort -n > $call-$band-$continent-$start_date-$end_date.rank_data
+fi
+
+rank-sig.R $call $band $continent $start_date $end_date $6 $7
+
+ if [ -s "$call-$band-$continent-$start_date-$end_date.png" ]
+   then
+     $VIEWER "$call-$band-$continent-$start_date-$end_date.png"
+ fi
+ 

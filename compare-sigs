@@ -31,7 +31,6 @@ if [ -z "$6" ]
 fi
 
 # extract the relevant data from the RBN database, and process it to produce intermediate data
-
 if [ ! -s $call1-$call2-$band-$continent-$start_date-$end_date.data ]  
   then
   grep ",$call1,\|,$call2," $directory/$filename | compare-sigs.py $call1 $call2 $band $continent $start_date $end_date > $call1-$call2-$band-$continent-$start_date-$end_date.data
@@ -41,7 +40,7 @@ fi
 compare-sigs.R $call1 $call2 $band $continent $start_date $end_date
 
 # if output was produced, then view it
-if [ -f "$call1-$call2-$band-$continent-$start_date-$end_date.png" ]
+if [ -s "$call1-$call2-$band-$continent-$start_date-$end_date.png" ]
   then
     $VIEWER "$call1-$call2-$band-$continent-$start_date-$end_date.png"
 fi

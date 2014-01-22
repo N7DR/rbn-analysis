@@ -28,6 +28,9 @@ download-rbn:
   files with friendly names.
 
 get-rbn:
-  Bring local database (rbndata.csv)  up to date.
+  Bring local database (rbndata.csv) up to date.
   
-
+rank-sig:
+  Compare the signal of a station to the signals of others on the same 
+  continent over a given time period, on a particular band and to a 
+  particular continent.
