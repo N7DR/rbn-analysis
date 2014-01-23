@@ -34,3 +34,13 @@ rank-sig:
   Compare the signal of a station to the signals of others on the same 
   continent over a given time period, on a particular band and to a 
   particular continent.
+
+rank-sig.py:
+  Used by rank-sig. Scans the local RBN database and provides as output a 
+  file that contains the following space-separated information over a given 
+  time period in each line:    
+    Epoch  target-stn-SNR  all-other-SNRs
+  all-other-SNRs are the SNRs for all stations on the same continent as the 
+  target, as heard near to the epoch time by stations that have heard the 
+  target station.
+
