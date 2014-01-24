@@ -11,8 +11,7 @@ export filename=rbndata.csv
 # program to be used to view the output file
 export VIEWER=gwenview
 
-# set the value of a bunch of variables
-
+# set the values of a bunch of variables
 export call1=$1
 export call2=$2
 export band=$3
@@ -30,18 +29,22 @@ if [ -z "$6" ]
     export end_date=30000000
 fi
 
+# replace slashes with hyphens for UNIX-safe versions of the calls
+export safe_call1=`echo -n $call1 | sed 's/\//-/g'`
+export safe_call2=`echo -n $call2 | sed 's/\//-/g'`
+
 # extract the relevant data from the RBN database, and process it to produce intermediate data
-if [ ! -s $call1-$call2-$band-$continent-$start_date-$end_date.data ]  
+if [ ! -s $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data ]  
   then
-  grep ",$call1,\|,$call2," $directory/$filename | compare-sigs.py $call1 $call2 $band $continent $start_date $end_date > $call1-$call2-$band-$continent-$start_date-$end_date.data
+  grep ",$call1,\|,$call2," $directory/$filename | compare-sigs.py $call1 $call2 $band $continent $start_date $end_date > $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data
 fi
 
 # complete the processing and generate plot
 compare-sigs.R $call1 $call2 $band $continent $start_date $end_date
 
 # if output was produced, then view it
-if [ -s "$call1-$call2-$band-$continent-$start_date-$end_date.png" ]
+if [ -s "$safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.png" ]
   then
-    $VIEWER "$call1-$call2-$band-$continent-$start_date-$end_date.png"
+    $VIEWER "$safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.png"
 fi
  
