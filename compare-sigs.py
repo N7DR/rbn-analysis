@@ -85,7 +85,6 @@ for n in range(2):
 # extract the lines within the target date range
 # (could eliminate this in the case that the dates are the default values,
 # and copy continent_lines directly to date_lines))
-
 date_lines = [[] for x in range(2)]
 
 for n in range(2):

@@ -17,7 +17,8 @@ compare-sigs.R
   Takes output from compare-sigs.py and plots it as a simple histogram. 
   Also includes a calculation of the best estimate of the true difference 
   in signal between the two compared stations given the input sample, and 
-  the 95% confidence limits of the estimate, if there are sufficient data.
+  the 95% and 99% confidence limits of the estimate, if there are sufficient 
+  data.
 
 convert-rbn:
   Convert RBN data from the as-is format in the RBN zip files to the 
@@ -44,3 +45,20 @@ rank-sig.py:
   target, as heard near to the epoch time by stations that have heard the 
   target station.
 
+rank-sig.R:
+  Takes output from rank-sig.py and plots it, showing both absolute SNR and 
+  percentile of SNR compared to other stations on the same continent.
+
+----
+
+These scripts are by N7DR, except that:
+  (1) download-rbn is a commented version of a script by HA5FTL;
+  (2) convert-rbn is based on a script by HA5FTL.
+  
+If you find these scripts useful, please take a moment to look at my web site, 
+and consider reading one of my books:
+  http://www.sff.net/people/N7DR
+
+If you have patches to improve these scripts, please let me know.
+  
+  73 -- Doc  N7DR  (N7DR@arrl.net)

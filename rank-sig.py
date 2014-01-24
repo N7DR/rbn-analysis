@@ -31,6 +31,8 @@ import time
  
 # rank-sig CALL BAND CONTINENT START-DATE END-DATE
 
+MAX_TIME_DIFFERENCE = 600  # maximum difference in seconds for comparisons
+
 data_filename='/zfs1/data/rbn/rbndata.csv'    # location of the RBN data
  
 target_call = sys.argv[1]
@@ -39,23 +41,22 @@ band = '20m'     # default
 continent = 'EU' # default
 
 # dates may be either integers or strings
-start_date = '00000000'
-end_date   = '30000000'
+start_date = 00000000
+end_date   = 30000000
 
-time_diff = 600
-
-if len(sys.argv) >= 2:
+if len(sys.argv) > 2:
   band = sys.argv[2]
 
-if len(sys.argv) >= 3:
+if len(sys.argv) > 3:
   continent = sys.argv[3]
 
-if len(sys.argv) >= 4:
+if len(sys.argv) > 4:
   start_date = sys.argv[4]
 
-if len(sys.argv) >= 5:
+if len(sys.argv) > 5:
   end_date = sys.argv[5]
   
+# extract the lines with the target call
 call_lines = []
 
 # short_line:
@@ -70,24 +71,30 @@ call_lines = []
 for line in sys.stdin:
   fields = line.split(',')  
   my_continent = fields[7]
-  short_line = [ fields[0], fields[2], fields[4], fields[5], int(fields[9]), fields[13], int(fields[14]) ] 
+  short_line = [ fields[0], fields[2], fields[4], fields[5], int(fields[9]), int(fields[13]), int(fields[14]) ] 
   call_lines.append(short_line)
 
+# extract the lines with the target continent
 poster_continent_lines = []
 
 for short_line in call_lines:
   this_continent = short_line[1]
+  
   if this_continent == continent:
     poster_continent_lines.append(short_line)
 
+# extract the lines within the target date range
+# (could eliminate this in the case that the dates are the default values,
+# and copy continent_lines directly to date_lines))
 date_lines = []
 
 for short_line in poster_continent_lines:
   this_date = short_line[5]
-#  print this_date, start_date, end_date
+
   if this_date >= start_date and this_date <= end_date:
     date_lines.append(short_line)
-    
+
+# extract the lines on the target band
 band_lines = []
 
 for short_line in date_lines:
@@ -98,44 +105,38 @@ for short_line in date_lines:
 if len(band_lines) == 0:
   exit
     
-my_lines = band_lines    # just to make it more obvious
-    
-#print my_lines
-#exit
-    
-# my_lines contains all the baseline QSOs
+my_lines = band_lines    # just to make it more obvious; my_lines contains all the short lines for baseline QSOs
 
-# start by being really slow and simple
-
+# slow, simple, but does the job
 results = {}  # key is epoch, value is a list of SNR measurements, of which the first is *my* signal at the poster
 
-with open(data_filename, 'r') as fp:    # handles opening and closing
+with open(data_filename, 'r') as fp:    # handles opening and closing; read the entire RBN dataset
   
   for line in fp:
     fields = line.split(',')
     
-    if fields[7] != my_continent:    # we are interested only in stations posted on the same continent
+    if fields[7] != my_continent:   # we are interested only in stations posted on the same continent
       continue
     
-    if fields[4] != band:
+    if fields[4] != band:           # and on the same band
       continue
     
-    if fields[2] != continent:
+    if fields[2] != continent:      # and on the target continent
       continue
     
     if fields[5] == target_call:    # don't compare postings of me
       continue
     
     rbn_time = int(fields[14])      # epoch seconds
-    remove_lines = []
+    remove_lines = []               # lines we can remove from my_lines because we've passed the relevant epoch
     
     for my_line in my_lines:
       
       if not results.has_key(my_line[6]):
-	results[my_line[6]] = [ my_line[4] ]
+	results[my_line[6]] = [ my_line[4] ]    # key is epoch, value is my SNR
       
-      minimum_time = my_line[6] - time_diff
-      maximum_time = my_line[6] + time_diff
+      minimum_time = my_line[6] - MAX_TIME_DIFFERENCE
+      maximum_time = my_line[6] + MAX_TIME_DIFFERENCE
       
       if rbn_time > maximum_time:        # the datasets MUST be in chronological order
         remove_lines.append(my_line)     # we will remove this line shortly
@@ -144,15 +145,15 @@ with open(data_filename, 'r') as fp:    # handles opening and closing
         my_poster = my_line[0]
         rbn_poster = fields[0]
         
-        if rbn_poster != my_poster:
+        if rbn_poster != my_poster:      # we require that the same station made both posts
 	  continue
 	
-        results[my_line[6]].append(int(fields[9]))    # appends in place, apparently; append the SNR from line 
+        results[my_line[6]].append(int(fields[9]))    # append the SNR of another station
  
-    for line_to_remove in remove_lines:    # now we can remove lines whose (epoch + time_diff) we have passed
+    for line_to_remove in remove_lines:    # now we can remove lines whose (epoch + MAX_TIME_DIFFERENCE) we have passed
       my_lines.remove(line_to_remove)
 
-# dictionaries are unsorted
+# NB: dictionaries are unsorted; print to standard output
 for epoch, values in results.iteritems():
   print epoch,
   for value in values:
