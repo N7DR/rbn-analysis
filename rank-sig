@@ -27,16 +27,19 @@ if [ -z "$5" ]
     export end_date=30000000
 fi
 
+# replace slashes with hyphens for UNIX-safe versions of the call
+export safe_call=`echo -n $call | sed 's/\//-/g'`
+
 # don't do the initial filtering if there's a non-zero file of the correct name; the sort isn't necessary, but it's helpful
-if [ ! -s $call-$band-$continent-$start_date-$end_date.rank_data ]
+if [ ! -s $safe_call-$band-$continent-$start_date-$end_date.rank_data ]
   then
-    grep ",$call," $directory/$filename | rank-sig.py $call $band $continent $start_date $end_date | sort -n > $call-$band-$continent-$start_date-$end_date.rank_data
+    grep ",$call," $directory/$filename | rank-sig.py $call $band $continent $start_date $end_date | sort -n > $safe_call-$band-$continent-$start_date-$end_date.rank_data
 fi
 
 rank-sig.R $call $band $continent $start_date $end_date $6 $7
 
- if [ -s "$call-$band-$continent-$start_date-$end_date.png" ]
+ if [ -s "$safe_call-$band-$continent-$start_date-$end_date.png" ]
    then
-     $VIEWER "$call-$band-$continent-$start_date-$end_date.png"
+     $VIEWER "$safe_call-$band-$continent-$start_date-$end_date.png"
  fi
  

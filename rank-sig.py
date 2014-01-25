@@ -41,8 +41,8 @@ band = '20m'     # default
 continent = 'EU' # default
 
 # dates may be either integers or strings
-start_date = 00000000
-end_date   = 30000000
+start_date = 00000000  # default
+end_date   = 30000000  # default
 
 if len(sys.argv) > 2:
   band = sys.argv[2]
@@ -51,12 +51,12 @@ if len(sys.argv) > 3:
   continent = sys.argv[3]
 
 if len(sys.argv) > 4:
-  start_date = sys.argv[4]
+  start_date = int(sys.argv[4])
 
 if len(sys.argv) > 5:
-  end_date = sys.argv[5]
+  end_date = int(sys.argv[5])
   
-# extract the lines with the target call
+# create an array of short lines
 call_lines = []
 
 # short_line:
@@ -73,7 +73,9 @@ for line in sys.stdin:
   my_continent = fields[7]
   short_line = [ fields[0], fields[2], fields[4], fields[5], int(fields[9]), int(fields[13]), int(fields[14]) ] 
   call_lines.append(short_line)
-
+  
+#print "call lines: ", len(call_lines) 
+ 
 # extract the lines with the target continent
 poster_continent_lines = []
 
@@ -83,6 +85,8 @@ for short_line in call_lines:
   if this_continent == continent:
     poster_continent_lines.append(short_line)
 
+#print "poster continent lines: ", len(poster_continent_lines) 
+    
 # extract the lines within the target date range
 # (could eliminate this in the case that the dates are the default values,
 # and copy continent_lines directly to date_lines))

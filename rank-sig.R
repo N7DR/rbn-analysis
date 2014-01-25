@@ -28,15 +28,18 @@
     plot_duration <- as.integer(args[7])
   }
   
+  # create version of the call with / replaced by -
+  safe_call <- gsub("/", "-", call)
+  
 # turn off default graphics device
   graphics.off()
   
 # obtain start and end dates as seconds w.r.t. the UNIX epoch
-  sd <- as.Date(start, format='%Y%m%d', usetz=false, tz="GMT")
+  sd <- as.Date(max(c(start, "20090101")), format='%Y%m%d', usetz=false, tz="GMT") # force bound
   posix_sd <- as.POSIXct(sd)
   sd_seconds <- as.numeric(posix_sd)
    
-  ed <- as.Date(end, format='%Y%m%d', usetz=false, tz="GMT")
+  ed <- as.Date(min(c(end, "20201231")), format='%Y%m%d', usetz=false, tz="GMT")   # force bound
   posix_ed <- as.POSIXct(ed) 
   ed_seconds <- as.numeric(posix_ed)
   
@@ -52,7 +55,7 @@
   domain <- (x_max - x_min) / 86400 #
   
 # read the file that was created by the python script rank-sig.R
-  filename <- paste(sep="", call, "-", band, "-", continent, "-", start, "-", end, ".rank_data")
+  filename <- paste(sep="", safe_call, "-", band, "-", continent, "-", start, "-", end, ".rank_data")
   
   fc <- file(filename)
   mylist <- strsplit(readLines(fc), " ")
@@ -126,7 +129,7 @@
 # generate parameters for different durations of plot
 
   n_passes <- 1                      # default number of passes for writing x labels
-
+  
 # simple one-day plot
   if ( (domain == 1) && (plot_duration == 0) )
   { x_lab <- 'Hours'
@@ -180,9 +183,22 @@
     x_tick_labels <- c(seq(1, 12), "")
     x_labels_at <- x_ticks_at + (15 * 3600 * 24)
   } 
- 
+
+# multi-year plot
+  if (domain >= 370)
+  { x_lab <- 'Years'
+    start_year_str <- substring(start, 1, 4)
+    end_year_str <- substring(end, 1, 4)
+    start_year <- as.integer(start_year_str)
+    end_year <- as.integer(end_year_str)
+    x_axp <- c(x_min, x_max, end_year - start_year + 1 )
+    x_ticks_at <- seq(0, end_year - start_year + 1) * 365 * 3600 * 24 + x_min
+    x_tick_labels <- c(start_year + seq(0, end_year - start_year), "")
+    x_labels_at <- x_ticks_at + (365 * 3600 * 24 / 2)
+  }
+  
 # create the graphics device
-  png(filename=paste(sep="", call, "-", band, "-", continent, "-", start, "-", end, ".png"), width=800, height=1200)
+  png(filename=paste(sep="", safe_call, "-", band, "-", continent, "-", start, "-", end, ".png"), width=800, height=1200)
 
 # split into four screens:
 # 1: the main plot
