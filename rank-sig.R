@@ -28,7 +28,7 @@
     plot_duration <- as.integer(args[7])
   }
   
-  # create version of the call with / replaced by -
+# create version of the call with / replaced by -
   safe_call <- gsub("/", "-", call)
   
 # turn off default graphics device

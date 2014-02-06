@@ -4,7 +4,7 @@
 
 # compare-sigs.R call1 call2 band continent start-date end-date
 # e.g.,
-# compare-sigs[.R] N7DR K7KU 10m EU 20111126 20111126 N7DR K7KU
+# compare-sigs[.R] N7DR K7KU 10m EU 20111126 20111126
 
   MIN_DATA_POINTS <- 10  # minimum number of data points before we have enough data for an analysis of the mean
 
