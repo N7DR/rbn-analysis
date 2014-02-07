@@ -34,7 +34,7 @@ bg_colour <- colours()[342]               # background colour on the plot
 colour_scale  <- colorRampPalette(c('green', 'yellow', 'red'))  # colour scale with standard colour shape
 
 continents <- as.factor(c('AF', 'AS', 'EU', 'NA', 'OC', 'SA'))
-target_bands <- c('80m', '40m', '20m', '15m', '10m')
+target_bands <- c('160m', '80m', '40m', '30m', '20m', '17m', '15m', '12m', '10m')
 
 # read arguments from command line
 args <- commandArgs(TRUE)
@@ -176,7 +176,7 @@ if (days >= 370)
 
 graphics.off()
 
-png(filename=paste(sep="", safe_call, "-", start, "-", end, "-by-continent-5.png"),  width=800, height=600)
+png(filename=paste(sep="", safe_call, "-", start, "-", end, "-by-continent-9.png"),  width=800, height=600)
 
 # define two screens: one for the plot, one for the legend
 screen_1 <- c(0.0, 0.9, 0.0, 1.0)
