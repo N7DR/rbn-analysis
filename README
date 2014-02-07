@@ -32,8 +32,12 @@ get-rbn:
   Bring local database (rbndata.csv) up to date.
   
 plot-sig.R:
-  Show reported signal strength for a single station on all continents, for 
-  a particular band and over a given time period.
+  Show reported signal strength over a given time period for a single 
+  station on all continents, for a particular band.
+
+plot-sig-5.R:
+  Show reported signal strength over a given time period for a single 
+  station on all continents, for 80/40/20/15/10.
 
 rank-sig:
   Compare the signal of a station to the signals of others on the same 

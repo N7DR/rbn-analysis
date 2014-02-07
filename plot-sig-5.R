@@ -1,10 +1,10 @@
 #!/usr/bin/Rscript
 
-# plot station's signal
+# plot station's signal on five main bands (80/40/20/15/10)
 
-# plot-sig.R call band start-date end-date
+# plot-sig-5.R call start-date end-date
 # e.g.,
-# plot-sig[.R] N7DR 10m 20111126 20111126
+# plot-sig-5[.R] N7DR 20111126 20111126
 
 # data examples:
 # KT1D-1,K,NA,3504.6,80m,NR4M,K,NA,CQ,35,2009-02-21 00:00:02+00,,,20090221,1235199602
@@ -34,14 +34,14 @@ bg_colour <- colours()[342]               # background colour on the plot
 colour_scale  <- colorRampPalette(c('green', 'yellow', 'red'))  # colour scale with standard colour shape
 
 continents <- as.factor(c('AF', 'AS', 'EU', 'NA', 'OC', 'SA'))
+target_bands <- c('80m', '40m', '20m', '15m', '10m')
 
 # read arguments from command line
 args <- commandArgs(TRUE)
 
 call <- args[1]
-target_band <- args[2]
-start <- args[3]
-end <- args[4] 
+start <- args[2]
+end <- args[3] 
 
 # create version of the call with / replaced by -
 safe_call <- gsub("/", "-", call)
@@ -80,7 +80,7 @@ x_min <- sd_seconds
 x_max <- ed_seconds
 
 # duration of the plot, in days
-days <- (x_max - x_min) / 86400
+days <- (x_max - x_min) / 86400 #
 
 delta_epoch <- x_max - x_min
 step <- delta_epoch / NBINS                     # duration of a bin
@@ -89,13 +89,17 @@ data$binned <- cut(data$epoch, br = sd_seconds + (step * (0:NBINS)), labels = 1:
 
 data_list <- list()
 
-# separate the continents
+# separate the continents and bands
 for (this_continent in continents)
-{ data_list[[this_continent]] <- subset(subset(data, continent == this_continent ), band == target_band)
+{ data_list[[this_continent]] <- list()
+  
+  for (this_band in target_bands)
+  { data_list[[this_continent]][[this_band]] <- subset(subset(data, continent == this_continent ), band == this_band)
+  }
 }
 
 med_list <- list()
-y_max <- 0                # initial value of max SNR
+y_max <- 0                # initial value of max SNR (across all selected bands)
 
 # get the median
 get_median <- function(x) 
@@ -106,8 +110,12 @@ get_median <- function(x)
 
 # get the medians, and the maximum value thereof
 for (this_continent in continents)
-{ med_list[[this_continent]] <- tapply( data_list[[this_continent]]$snr, data_list[[this_continent]]$binned, get_median )
-  y_max <- max(y_max, med_list[[this_continent]], na.rm = TRUE)
+{ med_list[[this_continent]] <- list()
+  
+  for (this_band in target_bands)
+  { med_list[[this_continent]][[this_band]] <- tapply( data_list[[this_continent]][[this_band]]$snr, data_list[[this_continent]][[this_band]]$binned, get_median )
+    y_max <- max(y_max, med_list[[this_continent]][[this_band]], na.rm = TRUE)
+  }
 }
 
 # round up
@@ -168,7 +176,7 @@ if (days >= 370)
 
 graphics.off()
 
-png(filename=paste(sep="", safe_call, "-", target_band, "-", start, "-", end, "-by-continent.png"),  width=800, height=600)
+png(filename=paste(sep="", safe_call, "-", start, "-", end, "-by-continent-5.png"),  width=800, height=600)
 
 # define two screens: one for the plot, one for the legend
 screen_1 <- c(0.0, 0.9, 0.0, 1.0)
@@ -187,7 +195,7 @@ rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = bg_colour
 
 par(new=TRUE)
 
-title_str <- paste(sep="", call, ": ", target_band)
+title_str <- paste(sep="", call)
 title_str <- paste(sep="", title_str, " ", start, " to ", end)
 title(title_str)
 
@@ -205,7 +213,7 @@ for (nc in 1:length(continents))
 { y_ticks_at <- append(y_ticks_at, 1 - ((nc - 0.5 ) * 1 / (length(continents))))
 }
 
-axis(side = 2, at = y_ticks_at, labels = continents, las = 1, lwd = 0, lwd.ticks = 1 )
+axis(side = 2, at = y_ticks_at, labels = continents, las = 1, lwd = 0 )
 
 cs <- colour_scale(y_max)  # normalise the colour scale
 
@@ -213,13 +221,33 @@ cs <- colour_scale(y_max)  # normalise the colour scale
 for (nc in 1:length(continents))
 { par(new=TRUE)
 
-  for (n in (1:NBINS))
-  { xleft <- x_min + (n * (x_max - x_min) / NBINS)
-    xright <- xleft + (x_max - x_min) / NBINS
-    ybottom <- 1 - (nc / length(continents))
-    ytop <- ybottom + 1 / length(continents)
+  ybottom <- 1 - (nc / length(continents))
+  
+  for (nb in 1:length(target_bands))
+      
+  { yb <- ybottom + ( (nb - 1) / (length(continents) * length(target_bands) ) )
+    yt <- yb + ( 1 / ( length(continents) * length(target_bands) ) )
+  
+    for (n in (1:NBINS))
+    { xleft <- x_min + (n * (x_max - x_min) / NBINS)
+      xright <- xleft + (x_max - x_min) / NBINS
     
-    rect(xleft, ybottom, xright, ytop, col = cs[med_list[[nc]][n]], border = NA)
+      rect(xleft, yb, xright, yt, col = cs[med_list[[nc]][[nb]][n]], border = NA)
+    }
+  }
+}
+
+# horizontal lines between continents
+for (nc in 1:length(continents))
+{ par(new=TRUE)
+  
+  ybottom <- 1 - (nc / length(continents))
+  ytop <- ybottom + 1 / length(continents)
+  
+  lines( c(x_min, x_max), c(ybottom, ybottom), lwd = 1)
+  
+  if (nc == 1)
+  { lines( c(x_min, x_max), c(ytop, ytop), lwd = 1 )
   }
 }
 
@@ -235,5 +263,6 @@ text(x= 0.5, y = 0.925, labels = c('dB'))                                       
 
 legend_image <- as.raster(matrix(colour_scale(y_max), ncol = 1))
 rasterImage(legend_image, 0.9, 0.9, 0.1, 0.1, angle = 0)                     # parameters cause the gradient to appear in the correct direction
+
 
 graphics.off()   # close the device and go home
