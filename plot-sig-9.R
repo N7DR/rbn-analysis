@@ -36,6 +36,9 @@ colour_scale  <- colorRampPalette(c('green', 'yellow', 'red'))  # colour scale w
 continents <- as.factor(c('AF', 'AS', 'EU', 'NA', 'OC', 'SA'))
 target_bands <- c('160m', '80m', '40m', '30m', '20m', '17m', '15m', '12m', '10m')
 
+NBANDS <- length(target_bands)
+NCONTINENTS <- length(continents)
+
 # read arguments from command line
 args <- commandArgs(TRUE)
 
@@ -208,6 +211,13 @@ if (n_passes == 1)
   axis(side = 1, at = x_labels_at[c(FALSE, TRUE)], labels = x_tick_labels[c(FALSE, TRUE)], padj = 0.5, tick = FALSE )
 }
 
+# light vertical lines
+for (n in x_ticks_at)
+{ par(new=TRUE)
+  
+  lines( c(n, n), c(0, 1), lwd = 1, col =  colours()[352])
+}
+
 y_ticks_at <- vector()
 for (nc in 1:length(continents))
 { y_ticks_at <- append(y_ticks_at, 1 - ((nc - 0.5 ) * 1 / (length(continents))))
@@ -217,9 +227,18 @@ axis(side = 2, at = y_ticks_at, labels = continents, las = 1, lwd = 0 )
 
 cs <- colour_scale(y_max)  # normalise the colour scale
 
+# calculate a proxy pseudo-frequency
+function_qrg <- function(x, y) 
+{ baseline <- 1 - ((y) / length(continents))
+  return ( baseline + (x - 0.5) / (NBANDS * length(continents)) )
+}
+
 # plot the data
 for (nc in 1:length(continents))
-{ par(new=TRUE)
+{ pseudo_qrg_count <- rep(0, length.out = NBINS)
+  pseudo_qrg_product <- rep(0, length.out = NBINS)
+  
+  par(new=TRUE)
 
   ybottom <- 1 - (nc / length(continents))
   
@@ -231,10 +250,25 @@ for (nc in 1:length(continents))
     for (n in (1:NBINS))
     { xleft <- x_min + (n * (x_max - x_min) / NBINS)
       xright <- xleft + (x_max - x_min) / NBINS
-    
-      rect(xleft, yb, xright, yt, col = cs[med_list[[nc]][[nb]][n]], border = NA)
+ 
+      snr <- med_list[[nc]][[nb]][n]  # the median (S+N/N) to plot
+
+      if (!is.na(snr))
+      { par(new=TRUE)    
+        rect(xleft, yb, xright, yt, col = cs[snr], border = NA)            # plot it
+  
+        pseudo_qrg_count[n] <- pseudo_qrg_count[n] + snr                   # use these to calculate a pesudo frequency for plotting
+        pseudo_qrg_product[n] <- pseudo_qrg_product[n] + ( snr * (nb) ) 
+      }
     }
   }
+
+  pseudo_qrg <- pseudo_qrg_product / pseudo_qrg_count    # the pseudo frequency
+  y_qrg <- function_qrg(pseudo_qrg, nc)                  # the equivalent ordinate
+
+  par(new=TRUE)
+
+  lines(x_min + step * ( (1:NBINS) + 0.5), y_qrg)        # plot the pseudo frequency as a function of time 
 }
 
 # horizontal lines between continents
