@@ -64,7 +64,7 @@ rank-sig.R:
 ----
 
 These scripts are by N7DR, except that:
-  (1) download-rbn is a commented version of a script by HA5FTL;
+  (1) download-rbn is based on a script by HA5FTL;
   (2) convert-rbn is based on a script by HA5FTL.
   
 If you find these scripts useful, please take a moment to look at my web site, 

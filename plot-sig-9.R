@@ -137,7 +137,7 @@ if ( (days == 1) )
 }
 
 # weekend plot
-if ( (days > 1.1) && (days <= 27) )
+if ( (days > 1.1) && (days <= 2) )
 { x_lab <- 'Hours'
   x_axp <- c(x_min, x_max, days * 24)
   x_ticks_at <- seq(0, days * 4) * 3600 * 6 + x_min
@@ -146,7 +146,7 @@ if ( (days > 1.1) && (days <= 27) )
 }
 
 # one-month plot
-if ( (days > 7) && (days <= 360) )
+if ( (days > 2) && (days <= 360) )
 { x_lab <- 'Days'
   x_axp <- c(x_min, x_max, days)
   x_ticks_at <- seq(0, days) * 3600 * 24 + x_min

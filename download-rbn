@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
  
-# This is from HA5FTL
+# This is a modified version of a script from HA5FTL:
 #  http://tlfabian.blogspot.com/2013/10/amateur-ham-radio-analyzing-historical.html
-# with a few comments from N7DR
 
-# This simply downloads the complete daily RBN database as-is, and puts the daily data,
-# unchanged, into files with friendly names
+# This simply:
+#  1. downloads the parts of the RBN database that have not been previously downloaded, as-is;
+#  2. puts the daily data, unchanged, into files with friendly names
  
 import os
 import time
@@ -14,6 +14,7 @@ import urllib2
 import datetime
  
 base_url = "http://www.reversebeacon.net/raw_data/dl.php?f=" # place at which the data files are stored
+zipdata  = "zipfiles"                                        # file containing names of downloaded ZIP files
  
 today = datetime.date.today()
 delta = datetime.timedelta(1)
@@ -22,13 +23,15 @@ i = datetime.date(2009, 2, 21)		# start of the RBN data
  
 while i <= today:
     datestr = "%d%02d%02d" % (i.year, i.month, i.day)
+    
+    if os.path.isfile(zipdata):
+        if datestr in open(zipdata).read():
+	    print "%s available" % datestr
+            i += delta
+            continue
+   
     fname = "RBNDATA/%s.zip" % datestr
     url = base_url + datestr
- 
-    if os.path.isfile(fname):					# don't download data if there's already a file for that day (note that he doesn't chack that the file is not empty)
-        print "%s exists." % fname
-        i += delta
-        continue
  
     print "Downloading %s..." % url
  

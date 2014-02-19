@@ -19,14 +19,21 @@ import glob
 import os
 import time
 import zipfile
+
+import shutil
  
 basedir = "RBNDATA"
+inputfile = "rbndata.csv"   # data already available
 outputfile = "rbndata.tmp"  # file that will be used for output
+zipfilelist = "zipfiles"
+ 
+shutil.copyfile(inputfile, outputfile)
  
 zips = glob.glob(basedir + "/*.zip")
 zips.sort()
  
-impf = open(outputfile, "w")
+impf = open(outputfile, "a")
+rv = 0                                # return value; the number of zip files processed
  
 for z in zips:                        # read each zip file
     f = zipfile.ZipFile(z, "r")
@@ -70,5 +77,15 @@ for z in zips:                        # read each zip file
 	impf.write(new_line + "\n")
     csv.close()
     f.close()
+    os.remove(z)
+    rv = rv + 1
+    
+# append to list of downloaded zip files
+    zipfiles = open(zipfilelist, "a")
+    zipfiles.write(z + "\n")
+    zipfiles.close()
  
 impf.close()
+
+
+
