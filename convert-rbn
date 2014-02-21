@@ -17,6 +17,7 @@ import calendar
 import datetime
 import glob
 import os
+import sys
 import time
 import zipfile
 
@@ -86,6 +87,8 @@ for z in zips:                        # read each zip file
     zipfiles.close()
  
 impf.close()
+
+sys.exit(rv)
 
 
 
