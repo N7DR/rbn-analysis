@@ -234,7 +234,7 @@
   rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = "blue")  # set the background colout
   par(new=TRUE)
 
-  plot (x_new, y_new, xlim = c(x_min, x_max), xaxp = x_axp, xaxt = "n", , xlab = x_lab, ylim = c(0, global_max_snr_value_10), ylab = '(S+N)/N (dB)', pch = 15, col = colour_scale(max_count_10)[count])
+  plot (x_new, y_new, xlim = c(x_min, x_max), xaxp = x_axp, xaxt = "n", , xlab = x_lab, ylim = c(0, global_max_snr_value_10), ylab = '(S+N)_50/E(N_500) (dB)', pch = 15, col = colour_scale(max_count_10)[count])
 
   axis(side = 1, at = x_ticks_at, labels = FALSE )    # ticks on x axis
   
@@ -285,7 +285,7 @@
  
   line_vals <- function_engap(x_vals, pc, GAP_SIZE)                            # put gaps in the data as necessary
  
-  plot (line_vals[[1]], line_vals[[2]], type='l', lwd = 2, xlim = c(x_min, x_max), xaxp = x_axp, xaxt = "n", , xlab = x_lab, ylim = c(0, 100), ylab = '(S+N)/N percentile', pch = 15, col = 'red')
+  plot (line_vals[[1]], line_vals[[2]], type='l', lwd = 2, xlim = c(x_min, x_max), xaxp = x_axp, xaxt = "n", , xlab = x_lab, ylim = c(0, 100), ylab = '(S+N)_50/E(N_500) percentile', pch = 15, col = 'red')
 
   title(title_str)
  

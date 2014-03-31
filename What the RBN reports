@@ -1,0 +1,39 @@
+The RBN uses the term "SNR" to denote its measure of the strength of a 
+signal.
+
+Normally, this term is intended to denote "signal to noise" ratio, although 
+what is often meant by this is not the ratio of the signal to the noise, 
+but rather the ratio (signal + noise) to noise. But in the case of the RBN, 
+neither of these is related other than peripherally to the reported number.
+
+The following information comes from VE3NEA, who is the author of the 
+software used to report signals on the RBN.
+
+The reported number is the ratio of two power levels, in dB. The numerator 
+represents the total received power in a bandwidth of 50 Hz. In other 
+words, it is the signal plus noise in a 50 Hz bandwidth. The denominator, 
+however, is not a simple measurement: it is calculated in the following 
+steps:
+
+1. Determine the total received power in a bandwidth of (depending on the 
+hardware), typically 200 kHz.
+
+2. Divide this number by the bandwidth to determine a flux-per-Hz.
+
+3. Normalise this value to a bandwidth of 500 Hz.
+
+The result of step 3 is used as the denominator in the calculation of the 
+number that is reported.
+
+It is worth noting, then, that (1) the notional bandwidths for the numerator 
+and the denominator are different; and (2) the denominator includes all the 
+signals that are present in a wide bandwidth. During a busy contest 
+weekend, these will likely vastly overwhelm the actual background noise -- 
+and, in particular, will be a far cry from a measurement of the noise in a 
+50 Hz bandwidth which would accord with the conventional notion of 
+reporting the ration of signal to noise or (signal + noise) to noise.
+
+VE3NEA states that the RBN does not report simply the total received flux 
+in a standard bandwidth because SDR software has no capability to determine 
+the actual signal strength at the input terminals.
+
