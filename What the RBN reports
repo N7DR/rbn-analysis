@@ -9,6 +9,8 @@ neither of these is related other than peripherally to the reported number.
 The following information comes from VE3NEA, who is the author of the 
 software used to report signals on the RBN.
 
+----
+
 The reported number is the ratio of two power levels, in dB. The numerator 
 represents the total received power in a bandwidth of 50 Hz. In other 
 words, it is the signal plus noise in a 50 Hz bandwidth. The denominator, 
@@ -24,6 +26,8 @@ hardware), typically 200 kHz.
 
 The result of step 3 is used as the denominator in the calculation of the 
 number that is reported.
+
+----
 
 It is worth noting, then, that (1) the notional bandwidths for the numerator 
 and the denominator are different; and (2) the denominator includes all the 
