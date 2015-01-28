@@ -199,7 +199,7 @@ rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = bg_colour
 par(new=TRUE)
 
 title_str <- paste(sep="", call)
-title_str <- paste(sep="", title_str, " ", start, " to ", end)
+title_str <- paste(sep="", title_str, " ", start, " to ", end, " (5 bands)")
 title(title_str)
 
 axis(side = 1, at = x_ticks_at, labels = FALSE )    # ticks on x axis
