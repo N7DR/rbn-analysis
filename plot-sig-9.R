@@ -1,10 +1,10 @@
 #!/usr/bin/Rscript
 
-# plot station's signal on five main bands (80/40/20/15/10)
+# plot station's signal on nine bands (160/80/40/30/20/17/15/12/10)
 
-# plot-sig-5.R call start-date end-date
+# plot-sig-9.R call start-date end-date
 # e.g.,
-# plot-sig-5[.R] N7DR 20111126 20111126
+# plot-sig-9[.R] N7DR 20111126 20111126
 
 # data examples:
 # KT1D-1,K,NA,3504.6,80m,NR4M,K,NA,CQ,35,2009-02-21 00:00:02+00,,,20090221,1235199602
@@ -28,9 +28,9 @@
 # 13: DATE
 # 14: UNIX-EPOCH
 
-filename <- "/zfs1/data/rbn/rbndata.csv"  # RBN data file
-NBINS <- 200                              # number of discrete time bins
-bg_colour <- colours()[342]               # background colour on the plot
+filename <- "/zfs1/data/rbn/rbndata.csv"                        # RBN data file
+NBINS <- 200                                                    # number of discrete time bins
+bg_colour <- colours()[342]                                     # background colour on the plot
 colour_scale  <- colorRampPalette(c('green', 'yellow', 'red'))  # colour scale with standard colour shape
 
 continents <- as.factor(c('AF', 'AS', 'EU', 'NA', 'OC', 'SA'))
@@ -51,11 +51,11 @@ safe_call <- gsub("/", "-", call)
 
 # extract pertinent data from the RBN data file
 command <- paste(sep="", "grep ',", call, ",' ", filename, " | cut --delimiter=, -f3,5,10,14,15")
-column_classes <- c("CHARACTER", "CHARACTER", "INTEGER", "CHARACTER", "INTEGER")
+column_classes <- c("character", "character", "integer", "character", "integer")
 
-data <- read.csv(pipe(command), na.strings = "")
+data <- read.csv(pipe(command), na.strings = "", header = FALSE, colClasses = column_classes)
 
-# make data access more user friendly
+# make data access friendlier
 names(data) <- c("continent", "band", "snr", "date", "epoch")
 
 # remove data outside the date boundaries
