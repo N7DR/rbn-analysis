@@ -43,6 +43,11 @@ plot-sig-9.R:
   Show reported signal strength over a given time period for a single 
   station on all continents, for 160/80/40/30/20/17/15/12/10.
 
+plot-sig-zones-9.R:
+  Show reported signal strength over a given time period for a single 
+  station on the six CQ zones with the largest number of RBN posts of that
+  station, for 160/80/40/30/20/17/15/12/10.  
+  
 rank-sig:
   Compare the signal of a station to the signals of others on the same 
   continent over a given time period, on a particular band and to a 
