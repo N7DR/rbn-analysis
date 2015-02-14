@@ -259,8 +259,8 @@ for (nc in 1:length(zones_to_plot))
 # zones
 axis(side = 2, at = y_ticks_at, labels = zones_to_plot, las = 1, lwd = 0 )
 
-# number of posts
-axis(side = 2, mgp = c(3, 0.5, 0), at = y_ticks_at - 0.25 / (length(zones_to_plot)), labels = paste("(", as.character(n_posts), ")", sep =""), las = 1, lwd = 0 )
+# number of posts; mgp values (in particular, the second value) puts the number of posts flush against the y axis
+axis(side = 2, mgp = c(3, 0, 0), at = y_ticks_at - 0.25 / (length(zones_to_plot)), labels = paste("(", as.character(n_posts), ")", sep =""), las = 1, lwd = 0 )
 
 cs <- colour_scale(y_max)  # normalise the colour scale
 
