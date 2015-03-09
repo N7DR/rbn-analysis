@@ -137,7 +137,7 @@ for (this_zone in zones_to_plot)
 med_list <- list()
 y_max <- 0                # initial value of max SNR (across all selected bands)
 
-# get the median
+# get the median; there must be more than one value present in order for the median to be valid
 get_median <- function(x) 
 { if (length(x) <= 1) return (NA) 
 

@@ -28,6 +28,10 @@ download-rbn:
   Download daily historical files from the RBN as-is, putting the data into 
   files with friendly names.
 
+extract-rbn.py
+  Extract data for a range of dates from a local RBN database, sending the 
+  result to standard output.
+
 get-rbn:
   Bring local database (rbndata.csv) up to date.
   

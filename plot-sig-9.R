@@ -53,7 +53,11 @@ safe_call <- gsub("/", "-", call)
 command <- paste(sep="", "grep ',", call, ",' ", filename, " | cut --delimiter=, -f3,5,10,14,15")
 column_classes <- c("character", "character", "integer", "character", "integer")
 
+#command
+
 data <- read.csv(pipe(command), na.strings = "", header = FALSE, colClasses = column_classes)
+
+#data
 
 # make data access friendlier
 names(data) <- c("continent", "band", "snr", "date", "epoch")
@@ -90,6 +94,8 @@ step <- delta_epoch / NBINS                     # duration of a bin
 
 data$binned <- cut(data$epoch, br = sd_seconds + (step * (0:NBINS)), labels = 1:NBINS)  # add the bin labels
 
+#data
+
 data_list <- list()
 
 # separate the continents and bands
@@ -104,7 +110,7 @@ for (this_continent in continents)
 med_list <- list()
 y_max <- 0                # initial value of max SNR (across all selected bands)
 
-# get the median
+# get the median; there must be more than one value present in order for the median to be valid
 get_median <- function(x) 
 { if (length(x) <= 1) return (NA) 
 
@@ -124,6 +130,8 @@ for (this_continent in continents)
 # round up
 function_10 <- function(x) { return ( ( as.integer( (x - 1) / 10) +1 ) * 10 ) }    # function to return next higher integral multiple of 10, unless value is already such a multiple
 y_max <- function_10(y_max)
+
+#y_max
 
 n_passes <- 1
 
