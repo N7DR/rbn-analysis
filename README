@@ -1,12 +1,42 @@
 This directory contains various files and scripts associated with analysing 
 historical data from the Reverse Beacon Network ("RBN").
 
+These scripts should work on any modern operating system with the necessary 
+packages installed. In particular, the scripts require one or more of the 
+following be present:
+
+1. bash, or a compatible shell (I use bash 4.2);
+2. python (I use python 2.7.3)
+3. R (I use 2.15.1)
+
+Note that if you maintain a copy of the entire RBN dataset locally using 
+the download-rbn and convert-rbn scripts, the resultant file is quite large 
+(~33GB as of this writing), and you need sufficient space for two copies of 
+the file during the process of updating the dataset. (Also, obviously, the 
+files need to reside on a filesystem that supports files whose size is in 
+excess of 33GB. This should not be a problem for any modern filesystem. If 
+stored on a filesystem that supports compression, the actual amount of 
+space used on the disk is much smaller because of the inherent redundancy 
+in the RBN dataset. On my desktop system the compression ratio is 3.95, 
+meaning that the entire dataset requires only about 8GB of actual disk 
+space; reading the entire dataset using, for example, extract-rbn.py, 
+takes about 90 seconds.)
+
+----
+
+compare-multiple-sigs.R
+  Compare the signals from several stations against a single station, over 
+  a given time period, on a particular band and to a particular continent. 
+  Provides a 99% confidence interval for the difference between the means 
+  of each underlying signal distribution as compared to the signal 
+  distribution of the single target station.
+
 compare-sigs:
   Compare the signals between two stations over a given time period, on a 
-  particular band and to a particular continent. Provides an estimate 
-  of the difference between the means of the underlying signal 
-  distributions, the 95% confidence limits of that estimate, and
-  the probability that one signal really is stronger than the other. 
+  particular band and to a particular continent. Provides an estimate of 
+  the difference between the means of the underlying signal distributions, 
+  the 95% and 99% confidence limits of that estimate, and the probability 
+  that one signal really is stronger than the other. 
   
 compare-sigs.py: 
   Used by compare-sigs. Scans the local RBN database and extracts the 
