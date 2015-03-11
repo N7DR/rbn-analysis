@@ -1,0 +1,69 @@
+#! /bin/bash
+
+# compare-multiple-sigs start-date end-date band continent call-1 call-2 ... call-n
+
+# program to be used to view the output file
+export VIEWER=gwenview
+
+# -- Nothing below this line should need to be changed
+
+export PID=$$
+
+# extract the correct date range from the RBN data
+extract-rbn.py $1 $2 > sigs-$PID
+
+export start_date=$1
+export end_date=$2
+export band=$3
+export continent=$4
+
+export call_1=$5
+let "n_calls = $# - 5"
+
+# calls will hold the space-separated comparison calls
+export calls=""
+export space=" "
+
+# extract the pairwise data from the RBN data
+for (( i=1; i <= $n_calls; i++ ))
+do
+ let "param = 5 + i"
+ 
+# replace slashes with hyphens for UNIX-safe versions of the calls
+ export safe_call1=`echo -n $call_1 | sed 's/\//-/g'`
+ export safe_call2=`echo -n ${!param} | sed 's/\//-/g'`
+ 
+ grep ",$call_1,\|,${!param}," sigs-$PID | compare-sigs.py $call_1 ${!param} $band $continent $start_date $end_date > $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data
+ 
+ if [ -e $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data ]
+ then
+    export calls=$calls$space${!param}
+ fi
+ 
+done
+
+# create the plotes
+compare-multiple-sigs.R $start_date $end_date $band $continent $call_1 $calls
+
+# cleanup
+rm sigs-$PID
+
+for (( i=1; i <= $n_calls; i++ ))
+do
+ let "param = 5 + i"
+ 
+# replace slashes with hyphens for UNIX-safe versions of the calls
+ export safe_call2=`echo -n ${!param} | sed 's/\//-/g'`
+ 
+ if [ -e $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data ]
+ then
+   rm $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data
+ fi
+ 
+done
+
+# if output was produced, then view it
+if [ -s "$safe_call1-$band-$continent-$start_date-$end_date.png" ]
+  then
+    $VIEWER "$safe_call1-$band-$continent-$start_date-$end_date.png" 2> /dev/null 1>/dev/null
+fi
