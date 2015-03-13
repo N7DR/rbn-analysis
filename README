@@ -129,5 +129,8 @@ Also, the directory "examples" contains some example output plots:
 
 examples/N7DR-10m-EU-20140215-20140216.png
   Output from the compare-multiple-sigs command
+
+examples/N7DR-K0EU-10m-EU-20141129-20141130.png
+  Output from the compare-sigs command
   
   73 -- Doc  N7DR  (N7DR@arrl.net)
