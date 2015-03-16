@@ -40,6 +40,6 @@ rank-sig.R $call $band $continent $start_date $end_date $6 $7
 
  if [ -s "$safe_call-$band-$continent-$start_date-$end_date.png" ]
    then
-     $VIEWER "$safe_call-$band-$continent-$start_date-$end_date.png"
+     $VIEWER "$safe_call-$band-$continent-$start_date-$end_date.png"  2> /dev/null 1>/dev/null
  fi
  

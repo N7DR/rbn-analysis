@@ -10,17 +10,20 @@ following be present:
 3. R (I use 2.15.1)
 
 Note that if you maintain a copy of the entire RBN dataset locally using 
-the download-rbn and convert-rbn scripts, the resultant file is quite large 
-(~33GB as of this writing), and you need sufficient space for two copies of 
-the file during the process of updating the dataset. (Also, obviously, the 
-files need to reside on a filesystem that supports files whose size is in 
-excess of 33GB. This should not be a problem for any modern filesystem. If 
-stored on a filesystem that supports compression, the actual amount of 
-space used on the disk is much smaller because of the inherent redundancy 
-in the RBN dataset. On my desktop system the compression ratio is 3.95, 
-meaning that the entire dataset requires only about 8GB of actual disk 
-space; reading the entire dataset using, for example, extract-rbn.py, 
-takes about 90 seconds.)
+the download-rbn and convert-rbn scripts you need sufficient space for two 
+copies of the file during the process of updating the dataset. Also, 
+obviously, the files need to reside on a filesystem that supports files 
+of sufficient size. As of this writing, the RBN dataset is somewhat larger 
+than 33GB. Files of this size should not present a problem for any 
+modern filesystem, but it does mean that you must be sure not to use an old 
+filesystem with limits that do not allow for files of this size. 
+
+If stored on a filesystem that supports compression, the actual amount of 
+space used on the disk by the RBN dataset is much smaller because of the 
+inherent redundancy in the dataset. On my desktop system the compression 
+ratio is 3.95, meaning that the entire dataset requires only about 8GB of 
+actual disk space; reading the entire dataset using, for example, 
+extract-rbn.py, takes about 90 seconds.
 
 ----
 
@@ -132,5 +135,8 @@ examples/N7DR-10m-EU-20140215-20140216.png
 
 examples/N7DR-K0EU-10m-EU-20141129-20141130.png
   Output from the compare-sigs command
+
+examples//N7DR-10m-EU-20141129-20141129.png
+  Output from rank-sig command
   
   73 -- Doc  N7DR  (N7DR@arrl.net)

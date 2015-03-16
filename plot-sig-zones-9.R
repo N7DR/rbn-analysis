@@ -77,7 +77,8 @@ get_zone <- function(x)
     
   if (nrow(selected_row) == 0) 
   { cat("Unknown callsign: ", x) 
-    stop 
+#    stop 
+    quit()
   }
   
   return ( selected_row[1, 2]  )
