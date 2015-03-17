@@ -25,6 +25,15 @@ ratio is 3.95, meaning that the entire dataset requires only about 8GB of
 actual disk space; reading the entire dataset using, for example, 
 extract-rbn.py, takes about 90 seconds.
 
+If you need the RBN data for only a particular date range, rather than 
+downloading the entire dataset with the download-rbn and convert-rbn 
+scripts, you might find it more convenient to download one of the files at:
+  https://www.copy.com/s/smnSEO4RoQuTj4mC/rbn
+That directory contains compressed year-by-year files of the RBN data for 
+the years from 2009 to 2014. It also contains compressed month-by-month 
+files for the completed months in 2015. These files are in exactly the same 
+format as that produced by the convert-rbn script.  
+
 ----
 
 compare-multiple-sigs
