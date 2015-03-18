@@ -89,9 +89,15 @@ plot-sig-5.R:
   Show reported signal strength over a given time period for a single 
   station on all continents, for 80/40/20/15/10.
 
+plot-sig-9:
+  Create and display plot that shows reported signal strength over a given 
+  time period for a single station on all continents, for 
+  160/80/40/30/20/17/15/12/10
+  
 plot-sig-9.R:
-  Show reported signal strength over a given time period for a single 
-  station on all continents, for 160/80/40/30/20/17/15/12/10.
+  Used by plot-sig-9. Generate plot of reported signal strength over a 
+  given time period for a single station on all continents, for 
+  160/80/40/30/20/17/15/12/10.
 
 plot-sig-zones-5.R:
   Show reported signal strength over a given time period for a single 
@@ -138,6 +144,9 @@ RBN reports" that describes what the RBN documentation means when the term
 "SNR" appears.
 
 Also, the directory "examples" contains some example output plots:
+
+examples/K1N-20150201-20150215-by-continent-9.png
+  Output from plot-sig-9 command
 
 examples/N7DR-10m-EU-20140215-20140216.png
   Output from the compare-multiple-sigs command

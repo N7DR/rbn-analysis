@@ -1,0 +1,20 @@
+#! /bin/sh
+
+# program to be used to view the output file
+export VIEWER=gwenview
+
+export call=$1
+export start_date=$2
+export end_date=$3
+
+# replace slashes with hyphens for UNIX-safe versions of the call
+export safe_call=`echo -n $call | sed 's/\//-/g'`
+
+plot-sig-9.R "$call" $start_date $end_date
+
+export filename="$safe_call-$start_date-$end_date-by-continent-9.png"
+
+if [ -s "$filename" ]
+   then
+     $VIEWER "$filename" 2> /dev/null 1>/dev/null
+fi
