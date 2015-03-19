@@ -71,6 +71,10 @@ zone_column_classes <- c("character", "character")    # treat zones as strings
 zone_data <- read.table(zones_filename, header=FALSE, sep=" ", colClasses = zone_column_classes)
 names(zone_data) <- c("callsign", "zone")
 
+# remove anything related to spaces or hyphens in the callsign
+data$callsign <- gsub(" .*", "", data$callsign)
+#data$callsign <- gsub(" .", "", data$callsign)
+
 # function to map call to appropriate zone
 get_zone <- function(x) 
 { selected_row <- subset(zone_data, zone_data$callsign == x)

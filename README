@@ -99,15 +99,21 @@ plot-sig-9.R:
   given time period for a single station on all continents, for 
   160/80/40/30/20/17/15/12/10.
 
+plot-sig-zones-9:
+  Create and display plot that shows reported signal strength over a given 
+  time period for a single station on the six CQ zones with the largest 
+  number of RBN posts of that station, for 160/80/40/30/20/17/15/12/10.  
+
 plot-sig-zones-5.R:
   Show reported signal strength over a given time period for a single 
   station on the six CQ zones with the largest number of RBN posts of that
   station, for 80/40/20/15/10.
-  
+
 plot-sig-zones-9.R:
-  Show reported signal strength over a given time period for a single 
-  station on the six CQ zones with the largest number of RBN posts of that
-  station, for 160/80/40/30/20/17/15/12/10.  
+  Used by plot-sig-zones-9. Generate plot of reported signal strength over 
+  a given time period for a single station on the six CQ zones with the 
+  largest number of RBN posts of that station, for 
+  160/80/40/30/20/17/15/12/10.  
   
 rank-sig:
   Compare the signal of a station to the signals of others on the same 
@@ -144,6 +150,9 @@ RBN reports" that describes what the RBN documentation means when the term
 "SNR" appears.
 
 Also, the directory "examples" contains some example output plots:
+
+examples/FT5ZM-20140125-20140211-by-zone-9.png
+  Output from plot-sig-zones-9 command
 
 examples/K1N-20150201-20150215-by-continent-9.png
   Output from plot-sig-9 command
