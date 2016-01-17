@@ -80,7 +80,7 @@ get_zone <- function(x)
 { selected_row <- subset(zone_data, zone_data$callsign == x)
     
   if (nrow(selected_row) == 0) 
-  { cat("Unknown callsign: ", x) 
+  { cat("Unknown callsign: ", x, "\r\n") 
 #    stop 
     quit()
   }
@@ -290,7 +290,7 @@ for (nc in 1:length(zones_to_plot))
     yt <- yb + ( 1 / ( length(zones_to_plot) * length(target_bands) ) )
   
     for (n in (1:NBINS))
-    { xleft <- x_min + (n * (x_max - x_min) / NBINS)
+    { xleft <- x_min + ( (n - 1) * (x_max - x_min) / NBINS)
       xright <- xleft + (x_max - x_min) / NBINS
  
       snr <- med_list[[nc]][[nb]][n]  # the median (S+N/N) to plot
@@ -310,7 +310,7 @@ for (nc in 1:length(zones_to_plot))
 
   par(new=TRUE)
 
-  lines(x_min + step * ( (1:NBINS) + 0.5), y_qrg)        # plot the pseudo frequency as a function of time 
+  lines(x_min + step * ( (1:NBINS) - 0.5), y_qrg)        # plot the pseudo frequency as a function of time 
 }
 
 # horizontal lines between zones
