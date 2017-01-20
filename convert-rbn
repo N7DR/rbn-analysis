@@ -36,11 +36,14 @@ zips.sort()
 impf = open(outputfile, "a")
 rv = 0                                # return value; the number of zip files processed
  
+print "Inside convert-rbn"
+ 
 for z in zips:                        # read each zip file
+    print "zfile: ",z
     f = zipfile.ZipFile(z, "r")
     content = None
     csvname = f.namelist()[0]
-    print csvname
+    print "cvsname: ", csvname
     csv = f.open(csvname, "r")
 
     for line in csv:                  # allow for a couple of minor changes in the RBN files over time

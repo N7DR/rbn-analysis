@@ -13,26 +13,29 @@ Note that if you maintain a copy of the entire RBN dataset locally using
 the download-rbn and convert-rbn scripts you need sufficient space for two 
 copies of the file during the process of updating the dataset. Also, 
 obviously, the files need to reside on a filesystem that supports files 
-of sufficient size. As of this writing, the RBN dataset is somewhat larger 
-than 33GB. Files of this size should not present a problem for any 
-modern filesystem, but it does mean that you must be sure not to use an old 
-filesystem with limits that do not allow for files of this size. 
+of sufficient size. As of this writing, the RBN dataset is around 50GB. 
+Files of this size should not present a problem for any modern filesystem, 
+but it does mean that you must be sure not to use an old filesystem with 
+limits that do not allow for files of this size. 
 
 If stored on a filesystem that supports compression, the actual amount of 
 space used on the disk by the RBN dataset is much smaller because of the 
 inherent redundancy in the dataset. On my desktop system the compression 
-ratio is 3.95, meaning that the entire dataset requires only about 8GB of 
+ratio is 3.95, meaning that the entire dataset requires only about 12GB of 
 actual disk space; reading the entire dataset using, for example, 
-extract-rbn.py, takes about 90 seconds.
+extract-rbn.py, takes about 150 seconds.
 
 If you need the RBN data for only a particular date range, rather than 
 downloading the entire dataset with the download-rbn and convert-rbn 
 scripts, you might find it more convenient to download one of the files at:
-  https://www.copy.com/s/smnSEO4RoQuTj4mC/rbn
+  https://www.adrive.com/public/cQwkEB/rbn
 That directory contains compressed year-by-year files of the RBN data for 
-the years from 2009 to 2014. It also contains compressed month-by-month 
-files for the completed months in 2015. These files are in exactly the same 
-format as that produced by the convert-rbn script.  
+the years from 2009 to 2016. These files are in exactly the same format as 
+that produced by the convert-rbn script. The directory also contains a 
+compressed summary file covering the same period; the format of this file 
+is described in the blog post: 
+  http://drevans.blog.enginehousebooks.com/2017/01/
+    summary-file-for-rbn-data-2009-to-2016.html  
 
 ----
 
@@ -70,6 +73,12 @@ convert-rbn:
   Convert RBN data from the as-is format in the RBN zip files to the 
   single-file CSV format used by these scripts.
   
+diurnal-posts-from-summary.R
+  Generates the plot presented as an example of the use of the RBN summary
+  file in the blog post: 
+    http://drevans.blog.enginehousebooks.com/2017/01/
+      summary-file-for-rbn-data-2009-to-2016.html. 
+
 download-rbn:
   Download daily historical files from the RBN as-is, putting the data into 
   files with friendly names.
@@ -114,6 +123,10 @@ plot-sig-zones-9.R:
   a given time period for a single station on the six CQ zones with the 
   largest number of RBN posts of that station, for 
   160/80/40/30/20/17/15/12/10.  
+  
+posting-statistics.py
+  Generates a summary file of annual, mensal and diurnal data that is useful
+  for various kinds of summary analyses.
   
 rank-sig:
   Compare the signal of a station to the signals of others on the same 

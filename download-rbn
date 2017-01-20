@@ -22,6 +22,7 @@ delta = datetime.timedelta(1)
 i = datetime.date(2009, 2, 21)		# start of the RBN data
  
 while i <= today:
+#while i < datetime.date(2015, 1, 1):
     datestr = "%d%02d%02d" % (i.year, i.month, i.day)
     
     if os.path.isfile(zipdata):
