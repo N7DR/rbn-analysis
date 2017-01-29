@@ -97,7 +97,7 @@ for (callsign in data$callsign)
 data$zone <- zone_vec
 sorted <- sort(table(data$zone), decreasing = TRUE)
 n_posts <- t(sorted)[1,][1:NZONES]
-zones_to_plot <- names(sorted)[1:NZONES]
+zones_to_plot <- names(sorted)[1:NZONES]	# assume that this doesn't include zone 0, which is used for /MM posters
 
 # calculate the limits of the plot
 start_date <- as.Date(as.POSIXct(min(data$epoch), tz = "GMT", origin="1970-01-01"))

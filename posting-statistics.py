@@ -4,7 +4,7 @@
 # posting-statistics.py < RBN-file
 
 # produces file <base_directory>/rbn-summary-data, containing summary
-# annual, mensal and diurnal data
+# annual, mensal and diurnal data from a file of RBN posts
 
 # 0: POSTER
 # 1: POSTER-COUNTRY-PREFIX

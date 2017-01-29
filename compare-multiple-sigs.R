@@ -219,9 +219,13 @@
   colours <- colours / 255
   colour <- rgb(colours[1], colours[2], colours[3], alpha = 0.5)
   
-  rect(0, 0.01, 0.5, 0.05, col = colour, border = NA)            # plot it
-  text(0.90, 0.04, "99%")
-  text(0.90, 0.02, "conf.")
+  rect(0, 0.05, 0.5, 0.09, col = colour, border = NA)            # plot it
+  text(0.90, 0.08, "99%")
+  text(0.90, 0.06, "conf.")
 
+# logo
+  text(x = 0.7, y = 0.025, labels = c('N7DR'))                                                                                    # title
+  rect(xl = 0.20, yb = 0.01, xr = 1.20, yt = 0.04, col = NA, lwd = 2)
+  
 # we're done; close the device and exit
   graphics.off()
