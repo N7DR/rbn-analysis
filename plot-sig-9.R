@@ -306,4 +306,8 @@ text(x= 0.5, y = 0.925, labels = c('dB'))                                       
 legend_image <- as.raster(matrix(colour_scale(y_max), ncol = 1))
 rasterImage(legend_image, 0.9, 0.9, 0.1, 0.1, angle = 0)                     # parameters cause the gradient to appear in the correct direction
 
+# logo
+text(x = 0.6, y = 0.025, labels = c('N7DR'))                                                                                    # title
+rect(xl = 0.10, yb = 0.01, xr = 1.10, yt = 0.04, col = NA, lwd = 2)
+  
 graphics.off()   # close the device and go home
