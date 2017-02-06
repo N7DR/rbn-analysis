@@ -43,6 +43,8 @@ while i <= today:
         f.close()
     except urllib2.HTTPError:
         print "Error downloading %s" % url
+    except urllib2.URLError:
+        print "Error downloading %s" % url
  
     i += delta
     time.sleep(5)					# I suspect that the wait is unnecessary, since the data are probably hosted on a cloud VM; but it does no harm
