@@ -54,8 +54,21 @@ end <- args[3]
 # create version of the call with / replaced by -
 safe_call <- gsub("/", "-", call)
 
+user <- Sys.info()[["effective_user"]]
+
+start_year <- substr(start, 1, 4)
+end_year <- substr(end, 1, 4)
+
+use_grep <- (user != 'n7dr')  # use grep unless rbncat is available
+
+rbncat_command <- ifelse(start_year == end_year,
+                          paste(sep="", "rbncat ", as.character(start_year)),
+                          paste(sep="", "(rbncat ", as.character(start_year), "&& rbncat ", as.character(end_year)))
+
+command <- ifelse(use_grep, paste(sep="", "grep ',", call, ",' ", filename, " | cut --delimiter=, -f1,3,5,10,14,15"),
+                            paste(sep="", rbncat_command, " | grep ',", call, ",'  | cut --delimiter=, -f1,3,5,10,14,15"))
+
 # extract pertinent data from the RBN data file
-command <- paste(sep="", "grep ',", call, ",' ", filename, " | cut --delimiter=, -f1,3,5,10,14,15")
 column_classes <- c("character", "character", "character", "integer", "character", "integer")
 
 data <- read.csv(pipe(command), na.strings = "", header = FALSE, colClasses = column_classes)
@@ -340,7 +353,7 @@ text(x= 0.5, y = 0.925, labels = c('dB'))                                       
 legend_image <- as.raster(matrix(colour_scale(y_max), ncol = 1))
 rasterImage(legend_image, 0.9, 0.9, 0.1, 0.1, angle = 0)                     # parameters cause the gradient to appear in the correct direction
 
-# logo
+# logo -- Please do not change
 text(x = 0.6, y = 0.025, labels = c('N7DR'))                                                                                    # title
 rect(xl = 0.10, yb = 0.01, xr = 1.10, yt = 0.04, col = NA, lwd = 2)
 
