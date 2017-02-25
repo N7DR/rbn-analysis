@@ -9,9 +9,6 @@ download-rbn
 convert-rbn
 
 # RBN data are not always in chronological order; no need to perform a stable (i.e., -s) sort
-nice sort -t , --key=15 -n rbndata.tmp > rbndata.csv
+nice sort -t , --temporary-directory=/zfs1/tmp --key=15 -n rbndata.tmp > rbndata.csv
 
 rm rbndata.tmp
-
-
-
