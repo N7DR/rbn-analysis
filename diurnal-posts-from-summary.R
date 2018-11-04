@@ -3,13 +3,17 @@
 # generate a plot of the diurnal number of posts by the RBN, stacked by year
 
 MIN_YEAR <- 2009
-MAX_YEAR <- 2016
+MAX_YEAR <- 2017
 
 filename <- "/zfs1/data/rbn/rbn-summary-data"  # the local location of the RBN summary data file
 
 # first two lines of the file:
 #band          mode          type          year         month           doy         posts         calls       posters
 #NA            NA             A          2009            NA            NA       5007040        143724           151
+
+# for 2017:
+#band          mode          type          year         month           doy         posts         calls       posters       scatter  good_posters   grid_metric
+#NA            NA             A          2009            NA            NA       5007040        143724           151          5541           150            22
 
 # rounding function
 round_n <- function(x, n) { return ( ( as.integer( (x - 1) / n) +1 ) * n ) }    # function to return next higher integral multiple of n, unless value is already such a multiple
@@ -29,6 +33,9 @@ diurnal_all_bands_and_modes_data$type <- NULL
 diurnal_all_bands_and_modes_data$month <- NULL
 diurnal_all_bands_and_modes_data$calls <- NULL
 diurnal_all_bands_and_modes_data$posters <- NULL
+diurnal_all_bands_and_modes_data$scatter <- NULL
+diurnal_all_bands_and_modes_data$good_posters <- NULL
+diurnal_all_bands_and_modes_data$grid_metric <- NULL
 
 # get ready to start to plot
 graphics.off()
@@ -37,8 +44,8 @@ png(filename=paste(sep="", "/tmp/rbn-posts-from-summary.png"),  width=800, heigh
 
 x_lab <- 'DOY'
 
-#              2009    2010   2011      2012      2013     2014    2015     2016
-clrs <- c("black", "red", rgb(0.1, 0.1, 0.5), "yellow", "green", "blue", "violet", rgb(0.6, 0.2, 0.2))
+#            2009   2010                2011      2012     2013    2014      2015               2016      2017
+clrs <- c("black", "red", rgb(0.1, 0.1, 0.5), "yellow", "green", "blue", "violet", rgb(0.6, 0.2, 0.2), "white")
 
 # create a frame to map between year and days in the year
 days_in_year <- data.frame(seq(MIN_YEAR, MAX_YEAR), 365)

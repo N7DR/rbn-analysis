@@ -6,7 +6,8 @@
 export VIEWER=gwenview
 
 # is rbncat available? For most users this should NOT be "true"
-export RBNCAT="false"
+#export RBNCAT="false"
+export RBNCAT="true"
 
 if [ $RBNCAT != "true" ]
   then

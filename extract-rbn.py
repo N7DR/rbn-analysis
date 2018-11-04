@@ -5,6 +5,8 @@
 
 # rbn-extract START-DATE END-DATE
 
+### this does not yet use rbn-cat
+
 # Examples:
 # KT1D-1,K,NA,3504.6,80m,NR4M,K,NA,CQ,35,2009-02-21 00:00:02+00,,,20090221,1235199602
 # WA7LNW,K,NA,28239,10m,AL7FS,KL,NA,DX,3,2013-12-12 23:59:59,12,CW,20131212,1386917999
@@ -73,6 +75,9 @@ while i <= end :
 
 # construct and execute the grep command
 command = "grep " + "'" + search_str + "' " + data_filename
+
+#print command
+
 subprocess.call(command, shell = True)
 
 

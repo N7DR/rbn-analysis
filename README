@@ -128,6 +128,11 @@ posting-statistics.py
   Generates a summary file of annual, mensal and diurnal data that is useful
   for various kinds of summary analyses.
   
+posting-statistics-with-scatter-and-grid-metric.py
+  Generates a summary file of annual, mensal and diurnal data that is useful
+  for various kinds of summary analyses. This is essentially the same as 
+  posting-statistics.py, but with some additional columns in the output.
+  
 rank-sig:
   Compare the signal of a station to the signals of others on the same 
   continent over a given time period, on a particular band and to a 
