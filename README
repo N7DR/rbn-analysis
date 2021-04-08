@@ -5,9 +5,9 @@ These scripts should work on any modern operating system with the necessary
 packages installed. In particular, the scripts require one or more of the 
 following be present:
 
-1. bash, or a compatible shell (I use bash 4.2);
-2. python (I use python 2.7.3)
-3. R (I use 2.15.1)
+1. bash, or a compatible shell (I use bash 5.0);
+2. python (I use python 3.7.3)
+3. R (I use 3.5.2)
 
 Note that if you maintain a copy of the entire RBN dataset locally using 
 the download-rbn and convert-rbn scripts you need sufficient space for two 
@@ -124,11 +124,11 @@ plot-sig-zones-9.R:
   largest number of RBN posts of that station, for 
   160/80/40/30/20/17/15/12/10.  
   
-posting-statistics.py
+posting-statistics.py:
   Generates a summary file of annual, mensal and diurnal data that is useful
   for various kinds of summary analyses.
   
-posting-statistics-with-scatter-and-grid-metric.py
+posting-statistics-with-scatter-and-grid-metric.py:
   Generates a summary file of annual, mensal and diurnal data that is useful
   for various kinds of summary analyses. This is essentially the same as 
   posting-statistics.py, but with some additional columns in the output.
@@ -153,7 +153,56 @@ rank-sig.R:
 
 ----
 
-These scripts are by N7DR, except that:
+In addition, the directory "cw-activity" contains a series of scripts that generate
+a plot of the annual CW metric as defined in the blog post
+  http://drevans.blog.enginehousebooks.com/2020/03/
+    rbn-based-proxy-metric-for-relative-cw.html
+
+These scripts are:
+
+----
+
+doit.sh:
+  The driver script that executes the other scripts in the correct order.
+
+job1.sh:
+  Creates sorted files of all the posted calls (including dupes), per year and per band
+
+job2.sh:
+  Determines the total number of posts for each year and band
+
+job3.sh:
+  Determines the total number of different calls posted for each year and band
+
+job4.sh:
+  For each year, determines the number of calls that appear 1, 2, 3, ... UPPER_BOUND times
+
+job5.R:
+  For each year, plot the number of calls that appear 1, 2, 3, ... UPPER_BOUND times
+
+job6.py:
+  For each year, estimates the first "large" value of n as described in 
+    http://drevans.blog.enginehousebooks.com/2020/03/
+      rbn-based-proxy-metric-for-relative-cw.html
+
+job7.sh:
+  For each year, determines the number of calls that appear (UPPER_BOUND + 1) or more times
+
+job8.R:
+  Plot the CW Activity metric
+
+rbncat
+  Copies one or more years of data from the RBN database to the standard output. You will 
+  probably have to change the value of the FILENAME variable defined in this script. You 
+  should also check that byte counts given in the script match the year boundaries 
+  correctly on your system.  
+
+On my desktop system, simply executing the doit.sh script is sufficient to, eventually, create
+the plot of CW activity from 2009 to 2020.
+
+----
+
+All the scripts in this project are by N7DR, except that:
   (1) download-rbn is based on a script by HA5FTL;
   (2) convert-rbn is based on a script by HA5FTL.
   
