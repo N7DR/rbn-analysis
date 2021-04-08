@@ -1,6 +1,6 @@
 #! /bin/sh
 
-cd /zfs1/data/rbn
+cd /zd1/rbn
 
 # download any new RBN zip files
 download-rbn
@@ -9,6 +9,12 @@ download-rbn
 convert-rbn
 
 # RBN data are not always in chronological order; no need to perform a stable (i.e., -s) sort
-nice sort -t , --temporary-directory=/zfs1/tmp --key=15 -n rbndata.tmp > rbndata.csv
+#nice sort -t , --temporary-directory=/zfs1/tmp --key=15 -n rbndata.tmp > rbndata.csv
 
+#rm rbndata.tmp
+
+# 200114
+nice sort -t , --temporary-directory=/tmp --key=15 -n -o rbndata.tmp rbndata.tmp
+
+rsync --inplace --no-whole-file rbndata.tmp rbndata.csv
 rm rbndata.tmp

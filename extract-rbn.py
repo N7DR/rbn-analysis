@@ -1,11 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: utf8 -*-
 
 # extract RBN data for a range of dates
 
-# rbn-extract START-DATE END-DATE
-
-### this does not yet use rbn-cat
+# rbn-extract YYYYMMDD YYYYMMDD
 
 # Examples:
 # KT1D-1,K,NA,3504.6,80m,NR4M,K,NA,CQ,35,2009-02-21 00:00:02+00,,,20090221,1235199602
@@ -31,12 +29,20 @@
  
 import calendar
 import datetime
+import os
 import subprocess
 import sys
 
-data_filename='/zfs1/data/rbn/rbndata.csv'    # location of the RBN data
+#data_filename='/zfs1/data/rbn/rbndata.csv'    # location of the RBN data
+data_filename='/zd1/rbn/rbndata.csv'    # location of the RBN data
+
+# is rbncat available? For most users this should NOT be "true"
+#export RBNCAT="false"
+RBNCAT = True
 
 # -- Nothing below this line should need to be changed  
+
+pid = os.getpid()
 
 # dates may be either integers or strings
 start_date_str = '00000000'  # default
@@ -73,12 +79,32 @@ while i <= end :
 
   i = i + delta
 
+#( command1 ; command2 ; command3 ) 
 # construct and execute the grep command
-command = "grep " + "'" + search_str + "' " + data_filename
+#print "constructing command"
+
+if RBNCAT == True:
+# concatentate the necessary years to a separate file in /tmp;
+# then we will grep that instead of the complete RBN dataset
+  filename = "/tmp/extract-" + str(pid)
+  
+  if os.path.exists(filename):
+    subprocess.call("rm " + filename, shell = True)
+
+  for year in range(int(year_start), (int(year_end) + 1)):
+    command = "rbncat " + str(year) + " >> " + filename
+    subprocess.call(command, shell = True)
+
+  command = "grep " + "'" + search_str + "' " + filename   
+  
+else:
+  command = "grep " + "'" + search_str + "' " + data_filename
 
 #print command
 
 subprocess.call(command, shell = True)
 
+#cleanup if necessary
+if RBNCAT == True:
+  subprocess.call("rm /tmp/extract-" + str(pid), shell = True)
 
-  

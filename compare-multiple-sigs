@@ -2,6 +2,8 @@
 
 # compare-multiple-sigs start-date end-date band continent call-1 call-2 ... call-n
 
+# each graph is wrt call-1, so positive numbers mean that the other call is louder
+
 # program to be used to view the output file
 export VIEWER=gwenview
 
@@ -33,17 +35,34 @@ do
  export safe_call1=`echo -n $call_1 | sed 's/\//-/g'`
  export safe_call2=`echo -n ${!param} | sed 's/\//-/g'`
  
- grep ",$call_1,\|,${!param}," sigs-$PID | compare-sigs.py $call_1 ${!param} $band $continent $start_date $end_date > $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data
+ grep ",$call_1,\|,${!param}," sigs-$PID | compare-sigs.py $call_1 ${!param} $band $continent $start_date $end_date > $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data.$PID
  
- if [ -e $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data ]
+ if [ -s $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data.$PID ]
  then
     export calls=$calls$space${!param}
+#    echo Processed ${!param} (as $safe_call2)
+ else
+   if [ -e $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data.$PID ]
+   then
+     echo File $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data.$PID has zero length
+   else
+     echo File $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data.$PID not found
+   fi
  fi
  
 done
 
-# create the plotes
-compare-multiple-sigs.R $start_date $end_date $band $continent $call_1 $calls
+#echo calls: $calls
+#echo "About to run R program"
+
+#pwd
+
+#ls -al
+
+
+
+# create the plots
+compare-multiple-sigs.R $start_date $end_date $band $continent $PID $call_1 $calls
 
 # cleanup
 rm sigs-$PID
@@ -55,9 +74,9 @@ do
 # replace slashes with hyphens for UNIX-safe versions of the calls
  export safe_call2=`echo -n ${!param} | sed 's/\//-/g'`
  
- if [ -e $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data ]
+ if [ -e $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data.$PID ]
  then
-   rm $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data
+   rm $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data.$PID
  fi
  
 done

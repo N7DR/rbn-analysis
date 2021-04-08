@@ -32,12 +32,12 @@
 # 2E0MPH 14
 # 3V/KF5EYY 33
 
-filename <- "/zfs1/data/rbn/rbndata.csv"                        # RBN data file
+filename <- "/zd1/rbn/rbndata.csv"                        # RBN data file
 NBINS <- 200                                                    # number of discrete time bins
 bg_colour <- colours()[342]                                     # background colour on the plot
 colour_scale  <- colorRampPalette(c('green', 'yellow', 'red'))  # colour scale with standard colour shape
 
-zones_filename <- "/zfs1/data/rbn/rbn-zones"                    # file of calls and zones
+zones_filename <- "/zd1/rbn/rbn-zones"                    # file of calls and zones
 NZONES <- 6                                                     # number of zones to plot
 
 target_bands <- c('160m', '80m', '40m', '30m', '20m', '17m', '15m', '12m', '10m')
@@ -167,7 +167,7 @@ for (this_zone in zones_to_plot)
 { med_list[[this_zone]] <- list()
   
   for (this_band in target_bands)
-  { med_list[[this_zone]][[this_band]] <- tapply( data_list[[this_zone]][[this_band]]$snr, data_list[[this_zone]][[this_band]]$binned, get_median )
+  { med_list[[this_zone]][[this_band]] <- tapply( data_list[[this_zone]][[this_band]]$snr, data_list[[this_zone]][[this_band]]$binned, get_median ) # seems to be a prob here if there are too few data
     y_max <- max(y_max, med_list[[this_zone]][[this_band]], na.rm = TRUE)
   }
 }
@@ -308,7 +308,7 @@ for (nc in 1:length(zones_to_plot))
  
       snr <- med_list[[nc]][[nb]][n]  # the median (S+N/N) to plot
 
-      if (!is.na(snr))
+      if (!is.na(snr) & (snr > 0))      # ignore SNR <= 0
       { par(new=TRUE)    
         rect(xleft, yb, xright, yt, col = cs[snr], border = NA)            # plot it
   

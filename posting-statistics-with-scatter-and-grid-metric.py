@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: utf8 -*-
 
 # posting-statistics-with-scatter-and-grid-metric.py < RBN-file [min-year [max-year]]
@@ -35,7 +35,7 @@ import sys
 resource.setrlimit(resource.RLIMIT_STACK, (resource.RLIM_INFINITY, resource.RLIM_INFINITY))
 
 MIN_YEAR = 2009
-MAX_YEAR = 2017
+MAX_YEAR = 2020
 
 # get parameters from the command line
 if len(sys.argv) == 2:
@@ -130,9 +130,14 @@ def lat_long(grid):
   
   A=ord('A')
   
+#  print "ord[0] = ", ord(string.upper(grid[0]))-A
+  
   if (ord(string.upper(grid[0]))-A > 17) or (ord(string.upper(grid[1]))-A > 17):
     return [90, 0]
   
+  if (ord(string.upper(grid[0]))-A < 0) or (ord(string.upper(grid[1]))-A < 0):
+    return [90, 0]
+
   safety=22
   lon=lat=-90
   lets=re.findall(r'([A-Xa-x])([A-Xa-x])',grid) #slob: assume no input errors
@@ -248,12 +253,14 @@ def grid_scatter_metric(p):
 #7: first seen 	
 #8: last seen
 
-database_filename = "detailed skimmers list"
+database_filename = "/home/n7dr/radio/RBN/detailed skimmers list"
 
 # quality control seems to be a low priority for the RBN :-(
-correct_grids = { 'NH6HI' : 'BL01FW',
-		  'N4AX' : 'EM64OT'
-		}
+correct_grids = { 'BG8TFC' : 'GL05SA',
+                  'NH6HI' : 'BL01FW',
+		  'PE5TT' : 'JO21TV',
+                  'N4AX' : 'EM64OT'
+                }
 
 lines = [line.rstrip('\n') for line in open(database_filename)]
 nlines = len(lines)
@@ -268,35 +275,42 @@ stored_callsign = ""
 for nline in xrange(0, nlines):
   line = lines[nline]
   
+#  print line
+  
   if not print_line:
     if 'callsign' in line and 'band' in line:
       print_line = True
       
-  if print_line:
+#  if print_line:
+  if print_line and not 'band' in line:
     valid_line = ('\t' in line)
     
     if valid_line:
+ #     print "valid line: ", line
+      
       fields = line.split("\t")
       callsign = fields[0].strip().upper().replace(' ', '')
       
       if ':' in callsign:
-	callsign = stored_callsign
-	stored_callsign = ""
+        callsign = stored_callsign
+        stored_callsign = ""
       
       if 'grid' not in fields[2]:
-	grid = fields[2].strip()
-	
-	if callsign in correct_grids:
-	  grid = correct_grids[callsign]
-	  	
-        latlong = lat_long(grid)
+        grid = fields[2].strip()
+
+      if callsign in correct_grids:
+        grid = correct_grids[callsign]
+
+#      print "callsign = ", callsign, ";grid = ", grid
+
+      latlong = lat_long(grid)
         
 # put longitude into range (0, 360)
-        if latlong[1] < 0:
-	  latlong[1] += 360
+      if latlong[1] < 0:
+        latlong[1] += 360
       
-        if callsign not in poster_info:
-	  poster_info[callsign] = latlong
+      if callsign not in poster_info:
+        poster_info[callsign] = latlong
     else:  # not valid line
       stored_callsign = line.strip().upper().replace(' ', '')		# probably next line will have address and port in place of this callsign
 

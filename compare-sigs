@@ -13,11 +13,14 @@ if [ $RBNCAT != "true" ]
   then
 # change the next two variables as necessary to match your environment
 # directory in which the RBN data are to be found
-    export directory=/zfs1/data/rbn
-    
+#    export directory=/zfs1/data/rbn
+    export directory=/zd1/rbn
+   
 # name of file containing the RBN data
     export filename=rbndata.csv
 fi
+
+export PID=$$
 
 # set the values of a bunch of variables
 export call1=$1
@@ -44,29 +47,37 @@ export safe_call2=`echo -n $call2 | sed 's/\//-/g'`
 # if rbncat is available, then use it
 if [ $RBNCAT = "true" ]
   then
+  
+  echo "RBNCAT is available"
+  
     START_YEAR=$(echo $start_date | cut -b 1-4)
     END_YEAR=$(echo $end_date | cut -b 1-4)
     
     if [ $START_YEAR = $END_YEAR ]
       then
-        rbncat $START_YEAR | grep ",$call1,\|,$call2," | compare-sigs.py $call1 $call2 $band $continent $start_date $end_date > $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data
+      
+        echo "START_YEAR is END_YEAR"
+        
+        rbncat $START_YEAR | grep ",$call1,\|,$call2," | compare-sigs.py $call1 $call2 $band $continent $start_date $end_date > $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data.$PID
       else
 # assume that they are one year apart
-        (rbncat $START_YEAR && rbncat $END_YEAR) | grep ",$call1,\|,$call2," | compare-sigs.py $call1 $call2 $band $continent $start_date $end_date > $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data
+        (rbncat $START_YEAR && rbncat $END_YEAR) | grep ",$call1,\|,$call2," | compare-sigs.py $call1 $call2 $band $continent $start_date $end_date > $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data.$PID
     fi
     
 #rbncat is not available     
   else
   
+  echo "RBNCAT is NOT available"
+  
 # extract the relevant data from the RBN database, and process it to produce intermediate data
-    if [ ! -s $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data ]  
+    if [ ! -s $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data.$PID ]  
       then
-        grep ",$call1,\|,$call2," $directory/$filename | compare-sigs.py $call1 $call2 $band $continent $start_date $end_date > $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data
+        grep ",$call1,\|,$call2," $directory/$filename | compare-sigs.py $call1 $call2 $band $continent $start_date $end_date > $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data.$PID
     fi
 fi
 
 # complete the processing and generate plot
-compare-sigs.R $call1 $call2 $band $continent $start_date $end_date
+compare-sigs.R $call1 $call2 $band $continent $start_date $end_date $PID
 
 # if output was produced, then view it
 if [ -s "$safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.png" ]
@@ -74,3 +85,5 @@ if [ -s "$safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.png" ]
     $VIEWER "$safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.png"
 fi
  
+# cleanup - remove the intermediate file
+#rm $safe_call1-$safe_call2-$band-$continent-$start_date-$end_date.data.$PID

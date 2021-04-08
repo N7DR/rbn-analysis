@@ -2,16 +2,18 @@
 
 # generate comparison plot of several stations' signals against that of a single station
 
-# compare-multiple-sigs.R start-date end-date band continent call-1 call-2 ... call-n
+# compare-multiple-sigs.R start-date end-date band continent PID call-1 call-2 ... call-n
 # e.g.,
-# compare-multiple-sigs[.R] 20111126 20111126 10m EU N7DR K0ALT N2IC K0RF
+# compare-multiple-sigs[.R] 20111126 20111126 10m EU 13579 N7DR K0ALT N2IC K0RF
 
   MIN_DATA_POINTS <- 10  							# minimum number of data points before we have enough data for an analysis of the mean
   colour_scale  <- colorRampPalette(c('blue', 'green', 'yellow', 'red'))  	# colour scale with standard colour shape
   BAR_WIDTH <- 0.25								# width of bar, in units in which 1 = (1 / n-calls) of the width of the plot
   bg_colour <- colours()[342]							# colour for background of plot
-  font_family <- 'Droid Sans Mono'  						# monospaced font
-  
+#  font_family <- 'Droid Sans Mono'  						# monospaced font
+#  font_family <- 'DejaVu Sans Mono'  						# monospaced font
+  font_family <- 'Noto Mono'  						# monospaced font
+ 
 # -- Nothing below this line should need to be changed  
   
 # read arguments from command line
@@ -21,19 +23,27 @@
   end <- args[2] 
   band <- args[3]
   continent <- args[4]
-  call1 <- args[5]					# master call
-  call <- tail(args, length(args) - 5)			# comparison calls
+  pid <- args[5]
+  call1 <- args[6]					# master call
+  call <- tail(args, length(args) - 6)			# comparison calls
+  
+#  print(paste(sep="","args = ", args))
   
 # create versions of the calls with / replaced by -
   safe_call1 <- gsub("/", "-", call1)
   safe_call <- gsub("/", "-", call)
   
+#  print(safe_call1)
+#  print(safe_call)
+  
 # turn off default graphics device
   graphics.off()
   
-  filename <- paste(sep="", safe_call1, "-", safe_call, "-", band, "-", continent, "-", start, "-", end, ".data")	# files from which data are to be read
+  filename <- paste(sep="", safe_call1, "-", safe_call, "-", band, "-", continent, "-", start, "-", end, ".data.", pid)	# files from which data are to be read
  
-  data <- list()
+#  print(filename)
+ 
+ data <- list()
  
   for(num in 1:length(filename))
   { data[[num]] <- read.table(filename[num])		# read data for each comparison call

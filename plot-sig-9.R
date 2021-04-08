@@ -58,7 +58,7 @@ use_grep <- (user != 'n7dr')  # use grep unless rbncat is available
 
 rbncat_command <- ifelse(start_year == end_year,
                           paste(sep="", "rbncat ", as.character(start_year)),
-                          paste(sep="", "(rbncat ", as.character(start_year), "&& rbncat ", as.character(end_year)))
+                          paste(sep="", "(rbncat ", as.character(start_year), " && rbncat ", as.character(end_year), ")" ))
 
 command <- ifelse(use_grep, paste(sep="", "grep ',", call, ",' ", filename, " | cut --delimiter=, -f3,5,10,14,15"),
                             paste(sep="", rbncat_command, " | grep ',", call, ",'  | cut --delimiter=, -f3,5,10,14,15"))
@@ -252,7 +252,9 @@ function_qrg <- function(x, y)
 
 # plot the data
 for (nc in 1:length(continents))
-{ pseudo_qrg_count <- rep(0, length.out = NBINS)
+{ #print(paste(sep="", "continent number = ", nc, " ", continents[nc]))
+
+  pseudo_qrg_count <- rep(0, length.out = NBINS)
   pseudo_qrg_product <- rep(0, length.out = NBINS)
   
   par(new=TRUE)
@@ -270,12 +272,17 @@ for (nc in 1:length(continents))
  
       snr <- med_list[[nc]][[nb]][n]  # the median (S+N/N) to plot
 
-      if (!is.na(snr))
+      if (!is.na(snr) & (snr > 0))    # ignore reported SNR <= 0
       { par(new=TRUE)    
         rect(xleft, yb, xright, yt, col = cs[snr], border = NA)            # plot it
   
         pseudo_qrg_count[n] <- pseudo_qrg_count[n] + snr                   # use these to calculate a pesudo frequency for plotting
         pseudo_qrg_product[n] <- pseudo_qrg_product[n] + ( snr * (nb) ) 
+        
+#        if ((continents[nc] == "NA") & (n == 52))
+#        { print(paste(sep="", "snr = ", snr, "; nb = ", nb))
+#          print(paste(sep="", "pseudo_qrg_count[n] = ", pseudo_qrg_count[n], "; pseudo_qrg_product[n] = ", pseudo_qrg_product[n]))
+#        }
       }
     }
   }
@@ -284,6 +291,15 @@ for (nc in 1:length(continents))
   y_qrg <- function_qrg(pseudo_qrg, nc)                  # the equivalent ordinate
 
   par(new=TRUE)
+  
+#  if (continents[nc] == "NA")
+#  { print(pseudo_qrg_product[52])
+#    print(pseudo_qrg_count[52])
+#    print(pseudo_qrg[52])
+#    print(y_qrg[52])
+#    print(paste(sep="", "max pseudo_qrg = ", max(pseudo_qrg), "max y_qrg = ", max(y_qrg)))
+#  }
+
 
   lines(x_min + step * ( (1:NBINS) - 0.5), y_qrg)        # plot the pseudo frequency as a function of time 
 }

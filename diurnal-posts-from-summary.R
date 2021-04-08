@@ -3,15 +3,11 @@
 # generate a plot of the diurnal number of posts by the RBN, stacked by year
 
 MIN_YEAR <- 2009
-MAX_YEAR <- 2017
+MAX_YEAR <- 2020
 
-filename <- "/zfs1/data/rbn/rbn-summary-data"  # the local location of the RBN summary data file
+filename <- "/zd1/rbn/rbn-summary-data"  # the local location of the RBN summary data file
 
 # first two lines of the file:
-#band          mode          type          year         month           doy         posts         calls       posters
-#NA            NA             A          2009            NA            NA       5007040        143724           151
-
-# for 2017:
 #band          mode          type          year         month           doy         posts         calls       posters       scatter  good_posters   grid_metric
 #NA            NA             A          2009            NA            NA       5007040        143724           151          5541           150            22
 
@@ -44,8 +40,8 @@ png(filename=paste(sep="", "/tmp/rbn-posts-from-summary.png"),  width=800, heigh
 
 x_lab <- 'DOY'
 
-#            2009   2010                2011      2012     2013    2014      2015               2016      2017
-clrs <- c("black", "red", rgb(0.1, 0.1, 0.5), "yellow", "green", "blue", "violet", rgb(0.6, 0.2, 0.2), "white")
+#            2009   2010                2011      2012     2013    2014      2015               2016      2017             2018     2019   2020
+clrs <- c("black", "red", rgb(0.1, 0.1, 0.5), "yellow", "green", "blue", "violet", rgb(0.6, 0.2, 0.2), "white", "cornflowerblue", "gold1", "darkorange")
 
 # create a frame to map between year and days in the year
 days_in_year <- data.frame(seq(MIN_YEAR, MAX_YEAR), 365)
@@ -115,5 +111,3 @@ legend(x = xpos, y = ypos, legend = seq(MIN_YEAR, MAX_YEAR),
        bty = 'n', text.col = 'black')
 
 graphics.off()
-
-

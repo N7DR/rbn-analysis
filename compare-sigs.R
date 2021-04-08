@@ -7,6 +7,7 @@
 # compare-sigs[.R] N7DR K7KU 10m EU 20111126 20111126
 
   MIN_DATA_POINTS <- 10  # minimum number of data points before we have enough data for an analysis of the mean
+  font_family <- 'Noto Mono'  						# monospaced font
 
 # read arguments from command line
   args <- commandArgs(TRUE)
@@ -16,7 +17,9 @@
   band <- args[3]
   continent <- args[4]
   start <- args[5]
-  end <- args[6]  
+  end <- args[6]
+  
+  pid <- ifelse(length(args) == 7, paste(sep="",".",args[7]), NULL)
 
 # create versions of the calls with / replaced by -
   safe_call1 <- gsub("/", "-", call1)
@@ -26,7 +29,7 @@
   graphics.off()
   
 # read data from the file produced by compare-sigs.py
-  d <- read.table(paste(sep="", safe_call1, "-", safe_call2, "-", band, "-", continent, "-", start, "-", end, ".data"))
+  d <- read.table(paste(sep="", safe_call1, "-", safe_call2, "-", band, "-", continent, "-", start, "-", end, ".data", pid))
   
 # make data access more user friendly
   names(d) <- c("dB")
@@ -49,7 +52,7 @@
 # title
   title_str <- paste(sep="", call2, " wrt ", call1, ": ", band, " ", continent)  
   if (start != "00000000" || end != "30000000") title_str <- paste(sep="", title_str, " ", start, " to ", end) 
-  title(title_str) 
+  title(title_str, family = font_family) 
 
 # set bounding box for plot
   minx <- par("usr")[1]
