@@ -13,8 +13,16 @@ convert-rbn
 
 #rm rbndata.tmp
 
-# 200114
-nice sort -t , --temporary-directory=/tmp --key=15 -n -o rbndata.tmp rbndata.tmp
+# 210409 remove duplicate lines
+#nice sort --temporary-directory=/tmp rbndata.tmp | uniq > rbndata1.tmp
 
-rsync --inplace --no-whole-file rbndata.tmp rbndata.csv
+# 200114
+#nice sort -t , --temporary-directory=/tmp --key=15 -n -o rbndata1.tmp rbndata1.tmp
+
+nice sort --temporary-directory=/tmp rbndata.tmp | nice uniq | nice sort -t , --temporary-directory=/tmp --key=15 -n -o rbndata1.tmp
+
 rm rbndata.tmp
+
+nice rsync --inplace --no-whole-file rbndata1.tmp rbndata.csv
+rm rbndata1.tmp
+

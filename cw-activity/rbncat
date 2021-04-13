@@ -1,1 +1,80 @@
-/home/n7dr/bin/rbncat
+#! /bin/sh
+
+# cat the RBN data for one or more years
+
+# rbncat year1 [year2]
+
+export FILENAME='/zd1/rbn/rbndata.csv'
+#export FILENAME='rbndata-new.csv'
+
+if [ ! -z "$2" ]
+  then
+    YEAR=$1
+    
+    while [ $YEAR -le $2 ]
+    do
+      rbncat $YEAR
+      YEAR=`expr $YEAR + 1`
+    done
+    exit
+fi
+
+case "$1" in
+
+  2009)
+  dd if=$FILENAME bs=409596963 count=1 status=none
+  ;;
+
+  2010)
+  dd if=$FILENAME bs=4096 skip=409596963 count=2066252691 iflag=count_bytes,skip_bytes status=none
+  ;;
+  
+  2011)
+  dd if=$FILENAME bs=4096 skip=2475849654 count=4277957744 iflag=count_bytes,skip_bytes status=none
+  ;;
+  
+  2012)
+  dd if=$FILENAME bs=8192 skip=6753807398 count=6172541891 iflag=count_bytes,skip_bytes status=none
+  ;;
+  
+  2013)
+  dd if=$FILENAME bs=8192 skip=12926349289 count=8017717143 iflag=count_bytes,skip_bytes status=none
+  ;;
+  
+  2014)
+  dd if=$FILENAME bs=8192 skip=20944066432 count=9397606294 iflag=count_bytes,skip_bytes status=none
+  ;;
+  
+  2015)
+  dd if=$FILENAME bs=8192 skip=30341672726 count=10009756695 iflag=count_bytes,skip_bytes status=none
+  ;;
+  
+  2016)
+  dd if=$FILENAME bs=8192 skip=40351429421 count=9343781672 iflag=count_bytes,skip_bytes status=none
+  ;;
+  
+  2017)
+  dd if=$FILENAME bs=8192 skip=49695211093 count=10180833431 iflag=count_bytes,skip_bytes status=none
+  ;;
+ 
+  2018)
+  dd if=$FILENAME bs=8192 skip=59876044524 count=11363426903 iflag=count_bytes,skip_bytes status=none
+  ;;
+  
+  2019)
+  dd if=$FILENAME bs=8192 skip=71239471427 count=11684353867 iflag=count_bytes,skip_bytes status=none
+  ;;
+
+  2020)
+  dd if=$FILENAME bs=8192 skip=82923825294 count=14944491022 iflag=count_bytes,skip_bytes status=none
+  ;;
+  
+  2021)
+  dd if=$FILENAME bs=8192 skip=97868316316 iflag=count_bytes,skip_bytes status=none
+  ;;
+ 
+
+  *)
+  dd if=$FILENAME bs=8192 skip=97868316316 iflag=count_bytes,skip_bytes status=none
+
+esac
