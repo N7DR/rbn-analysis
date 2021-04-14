@@ -28,7 +28,7 @@
 # 13: DATE
 # 14: UNIX-EPOCH
 
-filename <- "/zfs1/data/rbn/rbndata.csv"                        # RBN data file
+filename <- "/zd1/rbn/rbndata.csv"                              # RBN data file
 NBINS <- 200                                                    # number of discrete time bins
 bg_colour <- colours()[342]                                     # background colour on the plot
 colour_scale  <- colorRampPalette(c('green', 'yellow', 'red'))  # colour scale with standard colour shape
@@ -83,7 +83,7 @@ sd <- as.Date(max(c(start, "20090101")), format='%Y%m%d', usetz=false, tz="GMT")
 posix_sd <- as.POSIXct(sd)
 sd_seconds <- as.numeric(posix_sd)
 
-ed <- as.Date(min(c(end, "20201231")), format='%Y%m%d', usetz=false, tz="GMT")   # force bound
+ed <- as.Date(min(c(end, "20221231")), format='%Y%m%d', usetz=false, tz="GMT")   # force bound
 posix_ed <- as.POSIXct(ed) 
 ed_seconds <- as.numeric(posix_ed)
 

@@ -121,7 +121,7 @@ sd <- as.Date(max(c(start, "20090101")), format='%Y%m%d', usetz=false, tz="GMT")
 posix_sd <- as.POSIXct(sd)
 sd_seconds <- as.numeric(posix_sd)
 
-ed <- as.Date(min(c(end, "20201231")), format='%Y%m%d', usetz=false, tz="GMT")   # force bound
+ed <- as.Date(min(c(end, "20221231")), format='%Y%m%d', usetz=false, tz="GMT")   # force bound
 posix_ed <- as.POSIXct(ed) 
 ed_seconds <- as.numeric(posix_ed)
 
