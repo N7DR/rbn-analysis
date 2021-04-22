@@ -165,37 +165,14 @@ These scripts are:
 doit.sh:
   The driver script that executes the other scripts in the correct order.
 
-job1.sh:
-  Creates sorted files of all the posted calls (including dupes), per year and per band
+job1.py:
+  Reads the RBN data and performs initial analysis
 
-job2.sh:
-  Determines the total number of posts for each year and band
+job2.R:
+  Confirmatory plots to ensure that data look reasonable
 
-job3.sh:
-  Determines the total number of different calls posted for each year and band
-
-job4.sh:
-  For each year, determines the number of calls that appear 1, 2, 3, ... UPPER_BOUND times
-
-job5.R:
-  For each year, plot the number of calls that appear 1, 2, 3, ... UPPER_BOUND times
-
-job6.py:
-  For each year, estimates the first "large" value of n as described in 
-    http://drevans.blog.enginehousebooks.com/2020/03/
-      rbn-based-proxy-metric-for-relative-cw.html
-
-job7.sh:
-  For each year, determines the number of calls that appear (UPPER_BOUND + 1) or more times
-
-job8.R:
-  Plot the CW Activity metric
-
-rbncat
-  Copies one or more years of data from the RBN database to the standard output. You will 
-  probably have to change the value of the FILENAME variable defined in this script. You 
-  should also check that byte counts given in the script match the year boundaries 
-  correctly on your system.  
+job3.R:
+  Plot the CW activity metric 
 
 On my desktop system, simply executing the doit.sh script is sufficient to, eventually, create
 the plot of CW activity from 2009 to 2020.
