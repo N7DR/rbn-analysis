@@ -2,13 +2,14 @@
 
 # plot the graphs of number of posts in range 1..100 for each band
 
-# params: MIN_YEAR MAX_YEAR OUT_DIR
+# params: MIN_YEAR MAX_YEAR OUT_DIR UPPER_BOUND
 
 args <- commandArgs(trailingOnly=TRUE)
 
 MIN_YEAR <- as.integer(args[1])
 MAX_YEAR <- as.integer(args[2])
 OUT_DIR <- args[3]
+n_values <- as.integer(args[4])
 
 bands <- c('HF', '160', '80', '40', '30', '20', '17', '15', '12', '10')
 
@@ -35,8 +36,6 @@ for (band in bands)
   colours <- c('red', 'yellow', 'blue', 'green', 'black', 'white', 
                'chocolate4', 'darkorchid3', 'hotpink1', 'lightseagreen', 'royalblue2', 'burlywood4')
 
-
-
   d <- read.csv(filename, header = FALSE)                        # this produces a data /frame/, despite the name
   d <- log10(d)
 
@@ -44,9 +43,9 @@ for (band in bands)
 
   ymax <- auto_round(max(d))
 
-  years <- seq(MIN_YEAR, MAX_YEAR)
+  years <- seq(MIN_YEAR, MAX_YEAR + 1 - (1.0 / n_values), length.out = (MAX_YEAR + 1 - MIN_YEAR) * n_values) # does not include terminating value of MAX_YEAR + 1
 
-  min_year <- min(years)
+  min_year <- MIN_YEAR
 
   x_lab <- 'Number of Appearances (n)'
   y_lab <- 'Log(Number of calls) (Log(V(n)))'
@@ -71,11 +70,20 @@ for (band in bands)
   axis(side = 1, at = x_ticks_at, labels = x_tick_labels )    # ticks on x axis
   axis(side=2)
 
+  nr <- 0
+
   for (year in years)
-  { nr <- year - min_year + 1
+  { nr <- nr + 1
     Y <- d[, nr]
-    lines( seq(1, 100), Y, col = colours[nr] )
-    text(x = 90, y = ymax * 0.9 - ymax * 0.030 * nr, labels = year, col = colours[nr])
+
+# plot annual values in colour, otherwide just use black
+    if (n_values == 1)
+    { lines( seq(1, 100), Y, col = colours[nr] )
+      text(x = 90, y = ymax * 0.9 - ymax * 0.030 * nr, labels = year, col = colours[nr])
+    }
+    else
+    { lines( seq(1, 100), Y, col = 'black' )
+    }
   }
 
 # logo
